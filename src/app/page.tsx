@@ -1,18 +1,24 @@
 "use client"
 import React from 'react';
-import { Button, Select, Modal, Image as AntImage, message, Input } from "antd";
+import { Button, Select, Modal, Image as AntImage, message, Input, Switch } from "antd";
 import { useState } from "react";
 import Dropzone from "react-dropzone";
 import ReactCrop, { PixelCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import { cn } from '@/utils/cn';
 import { balanceSheetDict, cashFlowDict, profitLossDict } from '@/lib/gemini/config/dict';
+import { convertToThousands } from '@/utils/math';
 
 const dataDict = (key: string): string => {
   const name = { ...cashFlowDict, ...profitLossDict, ...balanceSheetDict }[key];
   return name ?? "";
 };
 
+const allOptions: { value: string, label: string }[] = [
+  { value: 'profitandloss', label: 'Income Statement' },
+  { value: 'balancestatement', label: 'Balance Sheet' },
+  { value: 'cashflow', label: 'Cash Flow' },
+]
 const ImageDropzone = () => {
   const [file, setFile] = useState(null);
   const [image, setImage] = useState<string | null>(null);
@@ -28,7 +34,8 @@ const ImageDropzone = () => {
   const [imgRef, setImgRef] = useState<HTMLImageElement | null>(null);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [extractedData, setExtractedData] = useState<{ [key: string]: { [key: string]: string } } | null>(null);
+  const [extractedData, setExtractedData] = useState<{ [key: string]: { [key: string]: string }[] } | null>(null);
+  const [isInThousands, setIsInThousands] = useState(false);
 
   const handleUpload = async (acceptedFiles: any) => {
     try {
@@ -134,7 +141,7 @@ const ImageDropzone = () => {
   const handleExtract = async () => {
     try {
       setLoading(true);
-      const results: { [key: string]: { [key: string]: string } } = {};
+      const results: { [key: string]: { [key: string]: string }[] } = {};
       for (const area of croppedAreas) {
         const response = await fetch('/api/extract', {
           method: 'POST',
@@ -152,9 +159,23 @@ const ImageDropzone = () => {
           results[area.label] = result.data;
         }
       }
+      if (isInThousands) {
 
-      setExtractedData(results);
-      return results;
+        setExtractedData(results);
+        return results;
+      }
+      const _results: { [key: string]: { [key: string]: string }[] } = {}
+      Object.entries(results).forEach((data: [string, any]) => {
+        const [key, values] = data
+        _results[key] = []
+        values.forEach((items: { [key: string]: string }) => {
+          const [p, d] = Object.entries(items)[0]
+          _results[key].push({ [p]: convertToThousands(d) })
+        })
+      })
+      setExtractedData(_results)
+      return _results;
+
 
     } catch (error) {
       console.error("Error extracting data:", error);
@@ -177,13 +198,8 @@ const ImageDropzone = () => {
       message.success('Data saved successfully!');
     }
   };
-
   const usedLabels = croppedAreas.map(area => area.label);
-  const availableOptions = [
-    { value: 'profitandloss', label: 'Profit and Loss' },
-    { value: 'balancestatement', label: 'Balance Statement' },
-    { value: 'cashflow', label: 'Cash Flow' },
-  ].filter(option => !usedLabels.includes(option.value));
+  const availableOptions = allOptions.filter(option => !usedLabels.includes(option.value));
 
   return (
     <div className="max-w-7xl mx-auto mb-4 p-8 bg-white rounded-xl shadow-lg mt-8">
@@ -210,6 +226,7 @@ const ImageDropzone = () => {
         ) : (
           <div className="space-y-8">
             <div className="flex items-center justify-between bg-gray-50 p-6 rounded-xl">
+              {/* Left Side Buttons */}
               <div className="flex items-center gap-4">
                 <Button
                   type="primary"
@@ -219,20 +236,21 @@ const ImageDropzone = () => {
                 >
                   Add Label
                 </Button>
-                <Button
-                  onClick={handleClearFile}
-                  danger
-                  size="large"
-                >
+                <Button onClick={handleClearFile} danger size="large">
                   Clear Image
                 </Button>
-                <Button
-                  type="default"
-                  size="large"
-                  onClick={() => setPreviewVisible(true)}
-                >
+                <Button type="default" size="large" onClick={() => setPreviewVisible(true)}>
                   View Full Image
                 </Button>
+              </div>
+
+              {/* Right Side Toggle Switch */}
+              <div className="flex items-center gap-2">
+                <span className="text-gray-800 font-medium">Data in 000s</span>
+                <Switch
+                  checked={isInThousands}
+                  onChange={checked => setIsInThousands(checked)}
+                />
               </div>
             </div>
 
@@ -243,7 +261,9 @@ const ImageDropzone = () => {
                   {croppedAreas.map((area, index) => (
                     <div key={index} className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
                       <div className="flex justify-between items-center mb-4">
-                        <span className="font-semibold text-gray-800 text-lg">{area.label}</span>
+                        <span className="font-semibold text-gray-800 text-lg">
+                          {{ profitandloss: "Income Statement", balancestatement: "Balance Sheet", cashflow: "Cash Flows" }[area.label]}
+                        </span>
                         <Button
                           danger
                           onClick={() => handleRemoveCrop(index)}
@@ -269,7 +289,7 @@ const ImageDropzone = () => {
                   <div key={label} className="mb-8">
                     <h1 className="text-lg font-medium mb-4">
                       <strong>
-                        {{ profitandloss: "Income Statement", balancestatement: "Balance Statement", cashflow: "Cash Flows" }[label]}
+                        {{ profitandloss: "Income Statement", balancestatement: "Balance Sheet", cashflow: "Cash Flows" }[label]}
                       </strong></h1>
                     <table border={1} cellPadding="8" style={{ width: "100%", borderCollapse: "collapse" }}>
                       <thead>
@@ -378,7 +398,7 @@ const ImageDropzone = () => {
           }}
         />
       </div>
-    </div>
+    </div >
   );
 };
 
