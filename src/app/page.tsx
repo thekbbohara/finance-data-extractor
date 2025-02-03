@@ -6,11 +6,11 @@ import Dropzone from "react-dropzone";
 import ReactCrop, { PixelCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import { cn } from '@/utils/cn';
-import { bankingBalanceSheetDict, bankRatiosDict, bankingIncomeStatementDict, insuranceIncomeStatementDict, insuranceBalanceSheetDict, nonelifeInsuranceRatiosDict, lifeInsuranceRatiosDict, htIncomeStatementDict, htBalanceSheetDict } from '@/lib/gemini/config/dict';
+import { bankingBalanceSheetDict, bankRatiosDict, bankingIncomeStatementDict, insuranceIncomeStatementDict, insuranceBalanceSheetDict, nonelifeInsuranceRatiosDict, lifeInsuranceRatiosDict, htIncomeStatementDict, htBalanceSheetDict, mpBalanceSheetDict, mpIncomeStatementDict } from '@/lib/gemini/config/dict';
 import { convertToThousands } from '@/utils/math';
 
 const dataDict = (key: string): string => {
-  const name = { ...bankingIncomeStatementDict, ...bankingBalanceSheetDict, ...bankRatiosDict, ...insuranceIncomeStatementDict, ...insuranceBalanceSheetDict, ...nonelifeInsuranceRatiosDict, ...lifeInsuranceRatiosDict, ...htIncomeStatementDict, ...htBalanceSheetDict }[key];
+  const name = { ...bankingIncomeStatementDict, ...bankingBalanceSheetDict, ...bankRatiosDict, ...insuranceIncomeStatementDict, ...insuranceBalanceSheetDict, ...nonelifeInsuranceRatiosDict, ...lifeInsuranceRatiosDict, ...htIncomeStatementDict, ...htBalanceSheetDict, ...mpBalanceSheetDict, ...mpIncomeStatementDict }[key];
   return name ?? "";
 };
 
