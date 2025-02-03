@@ -1,0 +1,209 @@
+//const cashFlowDict: { [key: string]: string } = {
+//  interest_received: "Interest received",
+//  fees_and_other_income_received: "Fees and other income received",
+//  dividend_received: "Dividend received",
+//  receipts_from_other_operating_activities:
+//    "Receipts from other operating activities",
+//  interest_paid: "Interest paid",
+//  commission_and_fees_paid: "Commission and fees paid",
+//  cash_payment_to_employees: "Cash payment to employees",
+//  other_expense_paid: "Other expense paid",
+//  operating_cash_flows_before_changes:
+//    "Operating cash flows before changes in operating assets and liabilities",
+//  increase_in_operating_assets_due_from_nepal_rastra_bank:
+//    "Increase in operating assets: Due from Nepal Rastra Bank",
+//  increase_in_operating_assets_placement_with_banks:
+//    "Increase in operating assets: Placement with bank and financial institutions",
+//  increase_in_operating_assets_other_trading_assets:
+//    "Increase in operating assets: Other trading assets",
+//  increase_in_operating_assets_loans_to_banks:
+//    "Increase in operating assets: Loan and advances to bank and financial institutions",
+//  increase_in_operating_assets_loans_to_customers:
+//    "Increase in operating assets: Loans and advances to customers",
+//  increase_in_operating_assets_other_assets:
+//    "Increase in operating assets: Other assets",
+//  increase_in_operating_liabilities_due_to_banks:
+//    "Increase in operating liabilities: Due to bank and financial institutions",
+//  increase_in_operating_liabilities_due_to_nepal_rastra_bank:
+//    "Increase in operating liabilities: Due to Nepal Rastra Bank",
+//  increase_in_operating_liabilities_deposits_from_customers:
+//    "Increase in operating liabilities: Deposit from customers",
+//  increase_in_operating_liabilities_borrowings:
+//    "Increase in operating liabilities: Borrowings",
+//  increase_in_operating_liabilities_other_liabilities:
+//    "Increase in operating liabilities: Other liabilities",
+//  net_cash_flow_from_operating_activities_before_tax:
+//    "Net cash flow from operating activities before tax paid",
+//  income_taxes_paid: "Income taxes paid",
+//  net_cash_flow_from_operating_activities:
+//    "Net cash flow from operating activities",
+//  purchase_of_investment_securities: "Purchase of investment securities",
+//  receipts_from_sale_of_investment_securities:
+//    "Receipts from sale of investment securities",
+//  purchase_of_property_and_equipment: "Purchase of property and equipment",
+//  receipt_from_sale_of_property_and_equipment:
+//    "Receipt from the sale of property and equipment",
+//  purchase_of_intangible_assets: "Purchase of intangible assets",
+//  receipt_from_sale_of_intangible_assets:
+//    "Receipt from the sale of intangible assets",
+//  purchase_of_investment_properties: "Purchase of investment properties",
+//  receipt_from_sale_of_investment_properties:
+//    "Receipt from the sale of investment properties",
+//  interest_received_investing: "Interest received (investing activities)",
+//  dividend_received_investing: "Dividend received (investing activities)",
+//  net_cash_used_in_investing_activities:
+//    "Net cash used in investing activities",
+//  receipt_from_issue_of_debt_securities:
+//    "Receipt from issue of debt securities",
+//  repayment_of_debt_securities: "Repayment of debt securities",
+//  receipt_from_issue_of_subordinated_liabilities:
+//    "Receipt from issue of subordinated liabilities",
+//  repayment_of_subordinated_liabilities:
+//    "Repayment of subordinated liabilities",
+//  receipt_from_issue_of_shares: "Receipt from issue of shares",
+//  dividends_paid: "Dividends paid",
+//  interest_paid_financing: "Interest paid (financing activities)",
+//  other_receipt_payment_financing:
+//    "Other receipt/payment (financing activities)",
+//  net_cash_from_financing_activities: "Net cash from financing activities",
+//  net_increase_in_cash_and_cash_equivalents:
+//    "Net increase (decrease) in cash and cash equivalents",
+//  cash_and_cash_equivalents_at_beginning:
+//    "Cash and cash equivalents at Sawan 1, 2081",
+//  effect_of_exchange_rate_fluctuations:
+//    "Effect of exchange rate fluctuations on cash and cash equivalents held",
+//  cash_and_cash_equivalents_at_end:
+//    "Cash and cash equivalents at 30 Ashwin 2081",
+//};
+//const bankingIncomeStatementSubCategories = [
+//  "interest_income",
+//  "interest_expenses",
+//  "net_interest_income",
+//  "fees_and_commission_income",
+//  "fees_and_commission_expenses",
+//  "net_fee_and_commission_income",
+//  "net_interest_fee_and_commission_income",
+//  "net_trading_income",
+//  "other_operating_income",
+//  "total_operating_income",
+//  "impairment_charge_or_reversal_for_loans_and_other_losses",
+//  "net_operating_income",
+//  "personnel_expenses",
+//  "other_operating_expenses",
+//  "depreciation_and_amortization",
+//  "operating_profit",
+//  "non_operating_income",
+//  "non_operating_expenses",
+//  "profit_before_income_tax",
+//  "current_tax",
+//  "deferred_tax",
+//  "profit_or_loss_for_the_period",
+//];
+//const balanceStatementSubCategories = [
+//  "cash_and_cash_equivalents",
+//  "due_from_nepal_rastra_bank",
+//  "placement_with_bank_and_financial_institutions",
+//  "derivative_financial_instruments",
+//  "other_trading_assets",
+//  "loan_and_advances_to_bfs",
+//  "loan_and_advances_to_customers",
+//  "investment_securities",
+//  "current_tax_asset",
+//  "investment_in_subsidiaries",
+//  "investment_in_associates",
+//  "investment_property",
+//  "property_and_equipment",
+//  "goodwill_and_intangible_assets",
+//  "deferred_tax_assets",
+//  "other_assets",
+//  "total_assets",
+//  "due_to_bank_and_financial_institutions",
+//  "due_to_nepal_rastra_bank",
+//  "derivative_financial_instruments",
+//  "deposit_from_customers",
+//  "borrowings",
+//  "current_tax_liabilities",
+//  "provisions",
+//  "deferred_tax_liabilities",
+//  "other_liabilities",
+//  "debt_securities_issued",
+//  "subordinated_liabilities",
+//  "total_liabilities",
+//  "share_capital",
+//  "share_premium",
+//  "retained_earnings",
+//  "reserves",
+//  "total_equity",
+//  "total_liabilities_and_equity",
+//];
+//const operatingCashFlowSubCategories = [
+//  // operating activities
+//  "interest_received",
+//  "fees_and_other_income_received",
+//  "dividend_received",
+//  "receipts_from_other_operating_activities",
+//  "interest_paid",
+//  "commission_and_fees_paid",
+//  "cash_payment_to_employees",
+//  "other_expense_paid",
+//  "operating_cash_flows_before_changes",
+//  "increase_in_operating_assets_due_from_nepal_rastra_bank",
+//  "increase_in_operating_assets_placement_with_banks",
+//  "increase_in_operating_assets_other_trading_assets",
+//  "increase_in_operating_assets_loans_to_banks",
+//  "increase_in_operating_assets_loans_to_customers",
+//  "increase_in_operating_assets_other_assets",
+//  "increase_in_operating_liabilities_due_to_banks",
+//  "increase_in_operating_liabilities_due_to_nepal_rastra_bank",
+//  "increase_in_operating_liabilities_deposits_from_customers",
+//  "increase_in_operating_liabilities_borrowings",
+//  "increase_in_operating_liabilities_other_liabilities",
+//  "net_cash_flow_from_operating_activities_before_tax",
+//  "income_taxes_paid",
+//  "net_cash_flow_from_operating_activities",
+//];
+//const investingCashFlowSubCategories = [
+//  // investing activities
+//  "purchase_of_investment_securities",
+//  "receipts_from_sale_of_investment_securities",
+//  "purchase_of_property_and_equipment",
+//  "receipt_from_sale_of_property_and_equipment",
+//  "purchase_of_intangible_assets",
+//  "receipt_from_sale_of_intangible_assets",
+//  "purchase_of_investment_properties",
+//  "receipt_from_sale_of_investment_properties",
+//  "interest_received_investing",
+//  "dividend_received_investing",
+//  "net_cash_used_in_investing_activities",
+//];
+//
+//const financingCashFlowSubCategories = [
+//  // financing activities
+//  "receipt_from_issue_of_debt_securities",
+//  "repayment_of_debt_securities",
+//  "receipt_from_issue_of_subordinated_liabilities",
+//  "repayment_of_subordinated_liabilities",
+//  "receipt_from_issue_of_shares",
+//  "dividends_paid",
+//  "interest_paid_financing",
+//  "other_receipt_payment_financing",
+//  "net_cash_from_financing_activities",
+//  "net_increase_in_cash_and_cash_equivalents",
+//  "cash_and_cash_equivalents_at_beginning",
+//  "effect_of_exchange_rate_fluctuations",
+//  "cash_and_cash_equivalents_at_end",
+//];
+//const bankRatiosSubCategories = [
+//  "capital_fund_to_rwa",
+//  "tier_i_capital_to_rwa",
+//  "cet_i_capital_to_rwa",
+//  "non_performing_loan_npl_to_total_loan",
+//  "net_non_performing_loan_to_total_loan",
+//  "total_loan_loss_provision_to_total_npl",
+//  "cost_of_funds",
+//  "credit_to_deposit_ratio",
+//  "base_rate_monthly",
+//  "interest_rate_spread",
+//  "return_on_equity_annualized",
+//  "return_on_assets_annualized",
+//];

@@ -1,90 +1,100 @@
-import { NextResponse } from 'next/server';
-import fs from 'fs/promises'; // Use fs/promises for async file operations
-import path from 'path';
+import { NextResponse } from "next/server";
+import fs from "fs/promises"; // Use fs/promises for async file operations
+import path from "path";
 import {
-  getCashFlowOperatingData,
-  getProfitLossData,
-  getCashFlowInvestingData,
-  getBalanceStatementData,
-  getCashFlowFinancingData
-} from '../../../lib/gemini/api';
+  getBalanceSheetData,
+  getBankRatiosData,
+  getBankingIncomeStatement,
+  getInsuranceBalanceSheetData,
+  getInsuranceIncomeStatementData,
+  getLifeInsuranceRatiosData,
+  getNonelifeInsuranceRatiosData,
+} from "../../../lib/gemini/api";
 
 export async function POST(request: Request) {
   try {
-    const { image, label } = await request.json();
+    const { image, sector, label } = await request.json();
 
     if (!image || !label) {
       return NextResponse.json(
-        { error: 'Image and label are required' },
-        { status: 400 }
+        { error: "Image and label are required" },
+        { status: 400 },
       );
     }
 
-    // Create temp file path
-    const tmpDir = '/tmp';
+    console.log("Create temp file path");
+    const tmpDir = "/tmp";
     const fileName = `${Date.now()}-${label}.png`;
     const filePath = path.join(tmpDir, fileName);
 
-    // Convert base64 to image and save
-    const base64Data = image.replace(/^data:image\/\w+;base64,/, '');
-    const buffer = Buffer.from(base64Data, 'base64');
+    console.log("Convert base64 to image and save");
+    const base64Data = image.replace(/^data:image\/\w+;base64,/, "");
+    const buffer = Buffer.from(base64Data, "base64");
     await fs.writeFile(filePath, buffer); // Use async writeFile
 
     let data = null;
+    console.log("Call appropriate extractor based on label");
 
-    // Call appropriate extractor based on label
-    switch (label) {
-      case 'profitandloss':
-        data = await getProfitLossData(filePath);
+    switch (`${sector}-${label}`) {
+      case "development_banks-incomeStatement":
+      case "commercial_banks-incomeStatement":
+      case "finance-incomeStatement":
+      case "micro_finance-incomeStatement":
+        data = await getBankingIncomeStatement(filePath);
         break;
-      case 'balancestatement':
-        data = await getBalanceStatementData(filePath);
+      case "non_life_insurance-balanceSheet":
+      case "life_insurance-balanceSheet":
+        data = await getInsuranceBalanceSheetData(filePath);
         break;
-      case 'cashflow':
-        //data = await getCashFlow(filePath);
-        const cashFlowOperatingData = await getCashFlowOperatingData(filePath);
-        const cashFlowInvestingData = await getCashFlowInvestingData(filePath);
-        const cashFlowFinancingData = await getCashFlowFinancingData(filePath);
-        data = [
-          ...cashFlowOperatingData,
-          ...cashFlowInvestingData,
-          ...cashFlowFinancingData
-        ];
+      case "non_life_insurance-incomeStatement":
+      case "life_insurance-incomeStatement":
+        data = await getInsuranceIncomeStatementData(filePath);
         break;
-      case 'operatingcashflow':
-        data = await getCashFlowOperatingData(filePath);
+      case "non_life_insurance-ratios":
+        data = await getNonelifeInsuranceRatiosData(filePath);
         break;
-      case 'investingcashflow':
-        data = await getCashFlowInvestingData(filePath);
+      case "life_insurance-ratios":
+        data = await getLifeInsuranceRatiosData(filePath);
         break;
-      case 'financingcashflow':
-        data = await getCashFlowFinancingData(filePath);
+      case "development_banks-balanceSheet":
+      case "commercial_banks-balanceSheet":
+      case "finance-balanceSheet":
+      case "micro_finance-balanceSheet":
+        data = await getBalanceSheetData(filePath);
+        break;
+      case "development_banks-ratios":
+      case "commercial_banks-ratios":
+      case "finance-ratios":
+      case "micro_finance-ratios":
+        data = await getBankRatiosData(filePath);
+        console.log({ data });
         break;
       default:
-        // Clean up temp file
+        //
+        console.log("Clean up temp file");
         await fs.unlink(filePath); // Use async unlink
         return NextResponse.json(
-          { error: 'Invalid label provided' },
-          { status: 400 }
+          { error: "Invalid label provided" },
+          { status: 400 },
         );
     }
 
-    // Clean up temp file
+    console.log("Clean up temp file");
     await fs.unlink(filePath); // Use async unlink
 
     if (!data) {
       return NextResponse.json(
-        { error: 'Failed to extract data' },
-        { status: 500 }
+        { error: "Failed to extract data" },
+        { status: 500 },
       );
     }
 
     return NextResponse.json({ data });
   } catch (error) {
-    console.error('Error processing request:', error);
+    console.error("Error processing request:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
 }

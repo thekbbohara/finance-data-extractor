@@ -6,19 +6,57 @@ import Dropzone from "react-dropzone";
 import ReactCrop, { PixelCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import { cn } from '@/utils/cn';
-import { balanceSheetDict, cashFlowDict, profitLossDict } from '@/lib/gemini/config/dict';
+import { bankingBalanceSheetDict, bankRatiosDict, bankingIncomeStatementDict, insuranceIncomeStatementDict, insuranceBalanceSheetDict, nonelifeInsuranceRatiosDict, lifeInsuranceRatiosDict } from '@/lib/gemini/config/dict';
 import { convertToThousands } from '@/utils/math';
 
 const dataDict = (key: string): string => {
-  const name = { ...cashFlowDict, ...profitLossDict, ...balanceSheetDict }[key];
+  const name = { ...bankingIncomeStatementDict, ...bankingBalanceSheetDict, ...bankRatiosDict, ...insuranceIncomeStatementDict, ...insuranceBalanceSheetDict, ...nonelifeInsuranceRatiosDict, ...lifeInsuranceRatiosDict }[key];
   return name ?? "";
 };
 
-const allOptions: { value: string, label: string }[] = [
-  { value: 'profitandloss', label: 'Income Statement' },
-  { value: 'balancestatement', label: 'Balance Sheet' },
-  { value: 'cashflow', label: 'Cash Flow' },
+const labelNames: Record<string, string> = { profitandloss: "Income Statement", balancestatement: "Balance Sheet", cashflow: "Cash Flows" }
+
+const sectorOptions: { value: string; label: string }[] = [
+  { value: "development_banks", label: "Development Banks" },
+  //{ value: "investment", label: "Investment" },
+  { value: "life_insurance", label: "Life Insurance" },
+  //{ value: "others", label: "Others" },
+  { value: "non_life_insurance", label: "Non Life Insurance" },
+  { value: "finance", label: "Finance" },
+  { value: "hotels_and_tourism", label: "Hotels And Tourism" },
+  { value: "commercial_banks", label: "Commercial Banks" },
+  //{ value: "manufacturing_and_processing", label: "Manufacturing And Processing" },
+  //{ value: "hydro_power", label: "Hydro Power" },
+  { value: "micro_finance", label: "Micro Finance" },
+];
+
+const IBOptions: { value: string, label: string }[] = [
+  { value: 'incomeStatement', label: 'Income Statement' },
+  { value: 'balanceSheet', label: 'Balance Sheet' },
 ]
+
+const IBROptions: { value: string, label: string }[] = [
+  ...IBOptions,
+  { value: 'ratios', label: 'Ratios' },
+]
+
+const allOptions: { [key: string]: { value: string, label: string }[] } = {
+  development_banks: [...IBROptions], //bankingIncomeStatement , bankingBalanceSheet, bankingRation
+  //investment: [...IBOptions],
+  life_insurance: [...IBROptions], //InsuranceIncomeStatement , InsuranceBalanceSheet
+  //others: [...IBOptions],
+  non_life_insurance: [...IBROptions], //InsuranceIncomeStatement , InsuranceBalanceSheet
+  finance: [...IBROptions], //bankingIncomeStatement , bankingBalanceSheet, bankingRation
+
+  hotels_and_tourism: [...IBOptions], //htBalanceSheet , htIncomeStatement
+  commercial_banks: [...IBROptions], //bankingIncomeStatement , bankingBalanceSheet, bankingRation
+
+  //manufacturing_and_processing: [...IBOptions],
+  //hydro_power: [...IBOptions],
+  micro_finance: [...IBROptions] //bankingIncomeStatement , bankingBalanceSheet, bankingRation
+
+}
+
 const ImageDropzone = () => {
   const [file, setFile] = useState(null);
   const [image, setImage] = useState<string | null>(null);
@@ -27,9 +65,11 @@ const ImageDropzone = () => {
   const [croppedAreas, setCroppedAreas] = useState<{
     crop: PixelCrop;
     label: string;
+    sector: string;
     croppedImage: string;
   }[]>([]);
-  const [selectedLabel, setSelectedLabel] = useState('profitandloss');
+  const [selectedLabel, setSelectedLabel] = useState('incomeStatement');
+  const [selectedSector, setSelectedSector] = useState('development_banks');
   const [isSelectionModalVisible, setIsSelectionModalVisible] = useState(false);
   const [imgRef, setImgRef] = useState<HTMLImageElement | null>(null);
   const [previewVisible, setPreviewVisible] = useState(false);
@@ -123,6 +163,7 @@ const ImageDropzone = () => {
         setCroppedAreas([...croppedAreas, {
           crop,
           label: selectedLabel,
+          sector: selectedSector,
           croppedImage: croppedImageUrl
         }]);
         setCrop(undefined);
@@ -150,7 +191,8 @@ const ImageDropzone = () => {
           },
           body: JSON.stringify({
             image: area.croppedImage,
-            label: area.label
+            label: area.label,
+            sector: area.sector
           })
         });
 
@@ -199,7 +241,7 @@ const ImageDropzone = () => {
     }
   };
   const usedLabels = croppedAreas.map(area => area.label);
-  const availableOptions = allOptions.filter(option => !usedLabels.includes(option.value));
+  const availableOptions = allOptions[selectedSector]?.filter(option => !usedLabels.includes(option.value));
 
   return (
     <div className="max-w-7xl mx-auto mb-4 p-8 bg-white rounded-xl shadow-lg mt-8">
@@ -242,6 +284,14 @@ const ImageDropzone = () => {
                 <Button type="default" size="large" onClick={() => setPreviewVisible(true)}>
                   View Full Image
                 </Button>
+                <Select
+                  key="section-select"
+                  value={selectedSector}
+                  onChange={setSelectedSector}
+                  style={{ width: 200 }}
+                  options={sectorOptions}
+                  size="large"
+                />,
               </div>
 
               {/* Right Side Toggle Switch */}
@@ -262,7 +312,7 @@ const ImageDropzone = () => {
                     <div key={index} className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
                       <div className="flex justify-between items-center mb-4">
                         <span className="font-semibold text-gray-800 text-lg">
-                          {{ profitandloss: "Income Statement", balancestatement: "Balance Sheet", cashflow: "Cash Flows" }[area.label]}
+                          {labelNames[area?.label as string]}
                         </span>
                         <Button
                           danger
@@ -289,7 +339,7 @@ const ImageDropzone = () => {
                   <div key={label} className="mb-8">
                     <h1 className="text-lg font-medium mb-4">
                       <strong>
-                        {{ profitandloss: "Income Statement", balancestatement: "Balance Sheet", cashflow: "Cash Flows" }[label]}
+                        {labelNames[label]}
                       </strong></h1>
                     <table border={1} cellPadding="8" style={{ width: "100%", borderCollapse: "collapse" }}>
                       <thead>
