@@ -14,7 +14,7 @@ const dataDict = (key: string): string => {
   return name ?? "";
 };
 
-const labelNames: Record<string, string> = { profitandloss: "Income Statement", balancestatement: "Balance Sheet", cashflow: "Cash Flows" }
+const labelNames: Record<string, string> = { incomeStatement: "Income Statement", balanceSheet: "Balance Sheet", ratios: "Ratios" }
 
 const sectorOptions: { value: string; label: string }[] = [
   { value: "development_banks", label: "Development Banks" },
@@ -339,7 +339,7 @@ const ImageDropzone = () => {
                   <div key={label} className="mb-8">
                     <h1 className="text-lg font-medium mb-4">
                       <strong>
-                        {labelNames[label]}
+                        {labelNames[label] || label}
                       </strong></h1>
                     <table border={1} cellPadding="8" style={{ width: "100%", borderCollapse: "collapse" }}>
                       <thead>
