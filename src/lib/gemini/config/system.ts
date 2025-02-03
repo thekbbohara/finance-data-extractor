@@ -3,9 +3,12 @@ import {
   bankingIncomeStatementSubCategories,
   bankRatiosSubCategories,
   htBalanceSheetSubCategories,
+  htIncomeStatementSubCategories,
   insuranceBalanceSheetSubCategories,
   insuranceIncomeStatementSubCategories,
   lifeInsuranceRatiosSubCategories,
+  mpBalanceSheetSubCategories,
+  mpIncomeStatementSubCategories,
   nonelifeInsuranceRatiosSubCategories,
 } from ".";
 
@@ -125,6 +128,27 @@ const ht_balancesheet_labels: string = `
   <sub_category>
 <category>
 `;
+const ht_incomestatement_labels: string = `
+<category>
+  <sub_category>
+  ${htIncomeStatementSubCategories.join("\n")}
+  <sub_category>
+<category>
+`;
+const mp_incomestatement_labels: string = `
+<category>
+  <sub_category>
+  ${mpIncomeStatementSubCategories.join("\n")}
+  <sub_category>
+<category>
+`;
+const mp_balancesheet_labels: string = `
+<category>
+  <sub_category>
+  ${mpBalanceSheetSubCategories.join("\n")}
+  <sub_category>
+<category>
+`;
 const quarterly_report_instruction = (labels: string) => {
   return `${identification} ${quarterly_report_data_format} ${labels} ${quarterly_output_format}`;
 };
@@ -152,3 +176,12 @@ export const LIFE_INSURANCE_RATIOS_EXTRACTION_INSTRUCTION =
 
 export const HT_BALANCESHEET_EXTRACTION_INSTRUCTION =
   quarterly_report_instruction(ht_balancesheet_labels);
+
+export const HT_INCOMESTATEMENT_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(ht_incomestatement_labels);
+
+export const MP_BALANCESHEET_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(mp_balancesheet_labels);
+
+export const MP_INCOMESTATEMENT_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(mp_incomestatement_labels);

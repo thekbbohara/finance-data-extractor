@@ -5,9 +5,13 @@ import {
   getBalanceSheetData,
   getBankRatiosData,
   getBankingIncomeStatement,
+  getHTBalanceSheetData,
+  getHTIncomeStatementData,
   getInsuranceBalanceSheetData,
   getInsuranceIncomeStatementData,
   getLifeInsuranceRatiosData,
+  getMPBalanceSheetData,
+  getMPIncomeStatementData,
   getNonelifeInsuranceRatiosData,
 } from "../../../lib/gemini/api";
 
@@ -33,9 +37,24 @@ export async function POST(request: Request) {
     await fs.writeFile(filePath, buffer); // Use async writeFile
 
     let data = null;
-    console.log("Call appropriate extractor based on label");
+    console.log(
+      "Call appropriate extractor based on label",
+      `${sector}-${label}`,
+    );
 
     switch (`${sector}-${label}`) {
+      case "hotels_and_tourism-incomeStatement":
+        data = await getHTIncomeStatementData(filePath);
+        break;
+      case "hotels_and_tourism-balanceSheet":
+        data = await getHTBalanceSheetData(filePath);
+        break;
+      case "manufacturing_and_processing-incomeStatement":
+        data = await getMPIncomeStatementData(filePath);
+        break;
+      case "manufacturing_and_processing-balanceSheet":
+        data = await getMPBalanceSheetData(filePath);
+        break;
       case "development_banks-incomeStatement":
       case "commercial_banks-incomeStatement":
       case "finance-incomeStatement":

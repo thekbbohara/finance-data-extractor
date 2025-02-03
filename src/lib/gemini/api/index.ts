@@ -6,8 +6,11 @@ import {
   bankingIncomeStatementConfig,
   bankRatiosConfig,
   htBalanceSheetConfig,
+  htIncomeStatementConfig,
   insuranceBalanceSheetConfig,
   insuranceIncomeStatementConfig,
+  mpBalanceSheetConfig,
+  mpIncomeStatementConfig,
   nonelifeInsuranceRatiosConfig,
 } from "../config";
 
@@ -16,9 +19,12 @@ import {
   BANK_RATIOS_EXTRACTION_INSTRUCTION,
   BANKING_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
   HT_BALANCESHEET_EXTRACTION_INSTRUCTION,
+  HT_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
   INSURANCE_BALANCESHEET_EXTRACTION_INSTRUCTION,
   INSURANCE_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
   LIFE_INSURANCE_RATIOS_EXTRACTION_INSTRUCTION,
+  MP_BALANCESHEET_EXTRACTION_INSTRUCTION,
+  MP_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
   NONELIFE_INSURANCE_RATIOS_EXTRACTION_INSTRUCTION,
 } from "../config/system";
 
@@ -139,4 +145,22 @@ export const getHTBalanceSheetData = createExtractor(
   "Extract  This Quarter Ending from given image",
   htBalanceSheetConfig,
   "ht_balancesheet_config",
+);
+export const getHTIncomeStatementData = createExtractor(
+  HT_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
+  "Extract  This Quarter Ending from given image",
+  htIncomeStatementConfig,
+  "ht_incomestatement_config",
+);
+export const getMPBalanceSheetData = createExtractor(
+  MP_BALANCESHEET_EXTRACTION_INSTRUCTION,
+  "Extract  This Quarter Ending from given image",
+  mpBalanceSheetConfig,
+  "mp_balancesheet_config",
+);
+export const getMPIncomeStatementData = createExtractor(
+  MP_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
+  "Extract  This Quarter Ending from given image",
+  mpIncomeStatementConfig,
+  "mp_incomestatement_config",
 );

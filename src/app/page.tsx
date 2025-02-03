@@ -25,7 +25,7 @@ const sectorOptions: { value: string; label: string }[] = [
   { value: "finance", label: "Finance" },
   { value: "hotels_and_tourism", label: "Hotels And Tourism" },
   { value: "commercial_banks", label: "Commercial Banks" },
-  //{ value: "manufacturing_and_processing", label: "Manufacturing And Processing" },
+  { value: "manufacturing_and_processing", label: "Manufacturing And Processing" },
   //{ value: "hydro_power", label: "Hydro Power" },
   { value: "micro_finance", label: "Micro Finance" },
 ];
@@ -51,7 +51,7 @@ const allOptions: { [key: string]: { value: string, label: string }[] } = {
   hotels_and_tourism: [...IBOptions], //htBalanceSheet , htIncomeStatement
   commercial_banks: [...IBROptions], //bankingIncomeStatement , bankingBalanceSheet, bankingRation
 
-  //manufacturing_and_processing: [...IBOptions],
+  manufacturing_and_processing: [...IBOptions], //mpBalanceSheet , mpIncomeStatement
   //hydro_power: [...IBOptions],
   micro_finance: [...IBROptions] //bankingIncomeStatement , bankingBalanceSheet, bankingRation
 

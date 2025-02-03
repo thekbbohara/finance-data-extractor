@@ -36,7 +36,6 @@ export const bankingIncomeStatementDict: Dict = {
   personnel_expenses: "Personnel Expenses",
   depreciation_and_amortization: "Depreciation and Amortization",
 };
-
 export const bankingBalanceSheetDict: Dict = {
   cash_and_cash_equivalents: "Cash and Cash Equivalents",
   cash_and_cash_equivalent: "Cash and Cash Equivalents",
@@ -82,7 +81,6 @@ export const bankingBalanceSheetDict: Dict = {
   total_equity: "Total Equity",
   total_liabilities_and_equity: "Total Liabilities and Equity",
 };
-
 export const bankRatiosDict: Dict = {
   capital_fund_to_rwa: "Capital Fund to RWA",
   tier_i_capital_to_rwa: "Tier-I capital to RWA",
@@ -192,7 +190,6 @@ export const nonelifeInsuranceRatiosDict: Dict = {
   solvency_margin_ratio_based_on_audited_fy_2079_80:
     "Solvency Margin Ratio (Based on Audited FY 2079/80)",
 };
-
 export const lifeInsuranceRatiosDict: Dict = {
   total_inforce_policy_count: "Total inforce Policy count",
   total_no_of_policies_issued_during_the_period:
@@ -217,7 +214,6 @@ export const lifeInsuranceRatiosDict: Dict = {
     "Unearned Premium Reserve for Term Policies (Amount)",
   solvency_margin_ratio_fy_2079_080: "Solvency Margin Ratio (FY 2079/080)",
 };
-
 export const htBalanceSheetDict: Dict = {
   property_plant_and_equipment: "Property, Plant and Equipment",
   intangible_asset: "Intangible Asset",
@@ -246,7 +242,6 @@ export const htBalanceSheetDict: Dict = {
   total_current_liabilities: "Total Current Liabilities",
   total_equity_and_liabilities: "Total Equity and Liabilities",
 };
-
 export const htIncomeStatementDict: Dict = {
   revenue_from_operation: "Revenue from Operation",
   cost_of_sales: "Cost of sales",
@@ -280,4 +275,61 @@ export const htIncomeStatementDict: Dict = {
   profit_loss_for_the_period: "Profit/(Loss) for the period",
   earning_per_equity_share: "Earning per equity share:",
   diluted_earning_per_share: "Diluted Earning per share",
+};
+export const mpIncomeStatementDict: Dict = {
+  revenue_from_operation: "Revenue from Operation",
+  other_income: "Other Income",
+  total_income: "Total Income",
+  cost_of_materials: "Cost of Materials",
+  manufacturing_expenses: "Manufacturing Expenses",
+  administrative_expenses: "Administrative Expenses",
+  selling_distribution_expenses: "Selling/Distribution Expenses",
+  depreciation: "Depreciation",
+  financial_expenses: "Financial Expenses",
+  other_expenses: "Other Expenses",
+  operating_profit: "Operating Profit",
+  provision_obsolescence: "Provision Obsolescence",
+  provision_write_off: "Provision Write Off",
+  housing_fund_allocation: "Housing Fund Allocation",
+  profit_before_provision_bonus: "Profit Before Provision Bonus",
+  provision_for_bonus: "Provision for Bonus",
+  profit_before_tax: "Profit Before Tax",
+  provision_taxation: "Provision Taxation",
+  current_tax: "Current Tax",
+  deferred_tax: "Deferred Tax",
+  net_profit: "Net Profit",
+};
+export const mpBalanceSheetDict: Dict = {
+  share_capital: "Share Capital",
+  share_premium: "Share Premium",
+  retained_earnings: "Retained Earnings",
+  total_equity: "Total Equity",
+  total_liabilities_and_equity: "Total Liabilities and Equity",
+  inventories: "Inventories",
+  trade_receivables: "Trade Receivables",
+  cash_and_cash_equivalents: "Cash and Cash Equivalents",
+  others: "Others",
+  other_current_assets: "Other Current Assets",
+  income_tax_assets_net: "Income Tax Assets (Net)",
+  total_current_assets: "Total Current Assets",
+  total_assets: "Total Assets",
+  property_plant_and_equipment: "Property, Plant and Equipment",
+  intangible_assets: "Intangible Assets",
+  investment_in_subsidiary: "Investment in Subsidiary",
+  investment_in_associates: "Investment in Associates",
+  deferred_tax_assets: "Deferred Tax Assets",
+  other_non_current_assets: "Other Non-Current Assets",
+  total_non_current_assets: "Total Non Current Assets",
+  trade_payables: "Trade Payables",
+  short_term_borrowings: "Short Term Borrowings",
+  other_financial_liabilities: "Other Financial Liabilities",
+  other_current_liabilities: "Other Current Liabilities",
+  provisions: "Provisions",
+  income_tax_liabilities_net: "Income Tax Liabilities (Net)",
+  total_current_liabilities: "Total Current Liabilities",
+  total_liabilities: "Total Liabilities",
+  long_term_borrowings: "Long Term Borrowings",
+  deferred_tax_liabilities: "Deferred Tax Liabilities",
+  other_non_current_liabilities: "Other Non-Current Liabilities",
+  total_non_current_liabilities: "Total Non Current Liabilities",
 };

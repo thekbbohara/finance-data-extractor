@@ -9,9 +9,12 @@ import {
   bankRatiosDict,
   Dict,
   htBalanceSheetDict,
+  htIncomeStatementDict,
   insuranceBalanceSheetDict,
   insuranceIncomeStatementDict,
   lifeInsuranceRatiosDict,
+  mpBalanceSheetDict,
+  mpIncomeStatementDict,
   nonelifeInsuranceRatiosDict,
 } from "./dict";
 
@@ -87,3 +90,12 @@ export const [lifeInsuranceRatiosSubCategories, lifeInsuranceRatiosConfig] =
 
 export const [htBalanceSheetSubCategories, htBalanceSheetConfig] =
   genConf(htBalanceSheetDict);
+
+export const [htIncomeStatementSubCategories, htIncomeStatementConfig] =
+  genConf(htIncomeStatementDict);
+
+export const [mpIncomeStatementSubCategories, mpIncomeStatementConfig] =
+  genConf(mpIncomeStatementDict);
+
+export const [mpBalanceSheetSubCategories, mpBalanceSheetConfig] =
+  genConf(mpBalanceSheetDict);
