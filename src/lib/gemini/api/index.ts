@@ -5,27 +5,49 @@ import {
   bankingBalanceSheetConfig,
   bankingIncomeStatementConfig,
   bankRatiosConfig,
+  hrlBalanceSheetConfig,
+  hrlIncomeStatementConfig,
   htBalanceSheetConfig,
   htIncomeStatementConfig,
   insuranceBalanceSheetConfig,
   insuranceIncomeStatementConfig,
+  mkchBalanceSheetConfig,
+  mkchIncomeStatementConfig,
   mpBalanceSheetConfig,
   mpIncomeStatementConfig,
   nonelifeInsuranceRatiosConfig,
+  nricBalanceSheetConfig,
+  nricIncomeStatementConfig,
+  nrmBalanceSheetConfig,
+  nrmIncomeStatementConfig,
+  ntcBalanceSheetConfig,
+  ntcIncomeStatementConfig,
+  nwclBalanceSheetConfig,
+  nwclIncomeStatementConfig,
 } from "../config";
 
 import {
   BALANCE_SHEET_EXTRACTION_INSTRUCTION,
   BANK_RATIOS_EXTRACTION_INSTRUCTION,
   BANKING_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
+  HRL_BALANCESHEET_EXTRACTION_INSTRUCTION,
+  HRL_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
   HT_BALANCESHEET_EXTRACTION_INSTRUCTION,
   HT_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
   INSURANCE_BALANCESHEET_EXTRACTION_INSTRUCTION,
   INSURANCE_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
   LIFE_INSURANCE_RATIOS_EXTRACTION_INSTRUCTION,
+  MKCH_BALANCESHEET_EXTRACTION_INSTRUCTION,
+  MKCH_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
   MP_BALANCESHEET_EXTRACTION_INSTRUCTION,
   MP_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
   NONELIFE_INSURANCE_RATIOS_EXTRACTION_INSTRUCTION,
+  NRIC_BALANCESHEET_EXTRACTION_INSTRUCTION,
+  NRIC_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
+  NRM_BALANCESHEET_EXTRACTION_INSTRUCTION,
+  NRM_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
+  NWCL_BALANCESHEET_EXTRACTION_INSTRUCTION,
+  NWCL_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
 } from "../config/system";
 
 if (!process.env.GEMINI_API_KEY) {
@@ -139,7 +161,6 @@ export const getLifeInsuranceRatiosData = createExtractor(
   nonelifeInsuranceRatiosConfig,
   "life_insurance_ratios",
 );
-
 export const getHTBalanceSheetData = createExtractor(
   HT_BALANCESHEET_EXTRACTION_INSTRUCTION,
   "Extract  This Quarter Ending from given image",
@@ -163,4 +184,87 @@ export const getMPIncomeStatementData = createExtractor(
   "Extract  This Quarter Ending from given image",
   mpIncomeStatementConfig,
   "mp_incomestatement_config",
+);
+
+// others
+export const getHRLIncomeStatementData = createExtractor(
+  HRL_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
+  "Extract This Quarter Ending from given image",
+  hrlIncomeStatementConfig,
+  "nwcl_incomestatement_config",
+);
+
+export const getHRLBalanceSheetData = createExtractor(
+  HRL_BALANCESHEET_EXTRACTION_INSTRUCTION,
+  "Extract This Quarter Ending from given image",
+  hrlBalanceSheetConfig,
+  "nwcl_balancesheet_config",
+);
+export const getNTCIncomeStatementData = createExtractor(
+  HRL_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
+  "Extract This Quarter Ending from given image",
+  ntcIncomeStatementConfig,
+  "nwcl_incomestatement_config",
+);
+
+export const getNTCBalanceSheetData = createExtractor(
+  HRL_BALANCESHEET_EXTRACTION_INSTRUCTION,
+  "Extract This Quarter Ending from given image",
+  ntcBalanceSheetConfig,
+  "nwcl_balancesheet_config",
+);
+export const getNWCLIncomeStatementData = createExtractor(
+  NWCL_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
+  "Extract This Quarter Ending from given image",
+  nwclIncomeStatementConfig,
+  "nwcl_incomestatement_config",
+);
+
+export const getNWCLBalanceSheetData = createExtractor(
+  NWCL_BALANCESHEET_EXTRACTION_INSTRUCTION,
+  "Extract This Quarter Ending from given image",
+  nwclBalanceSheetConfig,
+  "nwcl_balancesheet_config",
+);
+
+export const getNRMIncomeStatementData = createExtractor(
+  NRM_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
+  "Extract This Quarter Ending from given image",
+  nrmIncomeStatementConfig,
+  "nrm_incomestatement_config",
+);
+
+export const getNRMBalanceSheetData = createExtractor(
+  NRM_BALANCESHEET_EXTRACTION_INSTRUCTION,
+  "Extract This Quarter Ending from given image",
+  nrmBalanceSheetConfig,
+  "nrm_balancesheet_config",
+);
+
+export const getNRICIncomeStatementData = createExtractor(
+  NRIC_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
+  "Extract This Quarter Ending from given image",
+  nricIncomeStatementConfig,
+  "nric_incomestatement_config",
+);
+
+export const getNRICBalanceSheetData = createExtractor(
+  NRIC_BALANCESHEET_EXTRACTION_INSTRUCTION,
+  "Extract This Quarter Ending from given image",
+  nricBalanceSheetConfig,
+  "nric_balancesheet_config",
+);
+
+export const getMKCHIncomeStatementData = createExtractor(
+  MKCH_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
+  "Extract This Quarter Ending from given image",
+  mkchIncomeStatementConfig,
+  "mkch_incomestatement_config",
+);
+
+export const getMKCHBalanceSheetData = createExtractor(
+  MKCH_BALANCESHEET_EXTRACTION_INSTRUCTION,
+  "Extract This Quarter Ending from given image",
+  mkchBalanceSheetConfig,
+  "mkch_balancesheet_config",
 );

@@ -4,18 +4,30 @@ import {
   SchemaType,
 } from "@google/generative-ai";
 import {
+  type Dict,
   bankingBalanceSheetDict,
   bankingIncomeStatementDict,
   bankRatiosDict,
-  Dict,
+  hrlBalanceSheetDict,
+  hrlIncomeStatementDict,
   htBalanceSheetDict,
   htIncomeStatementDict,
   insuranceBalanceSheetDict,
   insuranceIncomeStatementDict,
   lifeInsuranceRatiosDict,
+  mkchBalanceSheetDict,
+  mkchIncomeStatementDict,
   mpBalanceSheetDict,
   mpIncomeStatementDict,
   nonelifeInsuranceRatiosDict,
+  nricBalanceSheetDict,
+  nricIncomeStatementDict,
+  nrmBalanceSheetDict,
+  nrmIncomeStatementDict,
+  ntcBalanceSheetDict,
+  ntcIncomeStatementDict,
+  nwclBalanceSheetDict,
+  nwclIncomeStatementDict,
 } from "./dict";
 
 const createSubCat = (dict: Dict): string[] => {
@@ -88,14 +100,43 @@ export const [
 export const [lifeInsuranceRatiosSubCategories, lifeInsuranceRatiosConfig] =
   genConf(lifeInsuranceRatiosDict);
 
+// Others
 export const [htBalanceSheetSubCategories, htBalanceSheetConfig] =
   genConf(htBalanceSheetDict);
-
 export const [htIncomeStatementSubCategories, htIncomeStatementConfig] =
   genConf(htIncomeStatementDict);
 
 export const [mpIncomeStatementSubCategories, mpIncomeStatementConfig] =
   genConf(mpIncomeStatementDict);
-
 export const [mpBalanceSheetSubCategories, mpBalanceSheetConfig] =
   genConf(mpBalanceSheetDict);
+
+export const [hrlIncomeStatementSubCategories, hrlIncomeStatementConfig] =
+  genConf(hrlIncomeStatementDict);
+export const [hrlBalanceSheetSubCategories, hrlBalanceSheetConfig] =
+  genConf(hrlBalanceSheetDict);
+
+export const [ntcIncomeStatementSubCategories, ntcIncomeStatementConfig] =
+  genConf(ntcIncomeStatementDict);
+export const [ntcBalanceSheetSubCategories, ntcBalanceSheetConfig] =
+  genConf(ntcBalanceSheetDict);
+
+export const [mkchBalanceSheetSubCategories, mkchBalanceSheetConfig] =
+  genConf(mkchBalanceSheetDict);
+export const [mkchIncomeStatementSubCategories, mkchIncomeStatementConfig] =
+  genConf(mkchIncomeStatementDict);
+
+export const [nricIncomeStatementSubCategories, nricIncomeStatementConfig] =
+  genConf(nricIncomeStatementDict);
+export const [nricBalanceSheetSubCategories, nricBalanceSheetConfig] =
+  genConf(nricBalanceSheetDict);
+
+export const [nrmBalanceSheetSubCategories, nrmBalanceSheetConfig] =
+  genConf(nrmBalanceSheetDict);
+export const [nrmIncomeStatementSubCategories, nrmIncomeStatementConfig] =
+  genConf(nrmIncomeStatementDict);
+
+export const [nwclBalanceSheetSubCategories, nwclBalanceSheetConfig] =
+  genConf(nwclBalanceSheetDict);
+export const [nwclIncomeStatementSubCategories, nwclIncomeStatementConfig] =
+  genConf(nwclIncomeStatementDict);

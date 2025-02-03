@@ -6,12 +6,57 @@ import Dropzone from "react-dropzone";
 import ReactCrop, { PixelCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import { cn } from '@/utils/cn';
-import { bankingBalanceSheetDict, bankRatiosDict, bankingIncomeStatementDict, insuranceIncomeStatementDict, insuranceBalanceSheetDict, nonelifeInsuranceRatiosDict, lifeInsuranceRatiosDict, htIncomeStatementDict, htBalanceSheetDict, mpBalanceSheetDict, mpIncomeStatementDict } from '@/lib/gemini/config/dict';
+import { bankingBalanceSheetDict, bankRatiosDict, bankingIncomeStatementDict, insuranceIncomeStatementDict, insuranceBalanceSheetDict, nonelifeInsuranceRatiosDict, lifeInsuranceRatiosDict, htIncomeStatementDict, htBalanceSheetDict, mpBalanceSheetDict, mpIncomeStatementDict, hrlBalanceSheetDict, hrlIncomeStatementDict, mkchBalanceSheetDict, mkchIncomeStatementDict, nricBalanceSheetDict, nricIncomeStatementDict, nrmBalanceSheetDict, nrmIncomeStatementDict, ntcBalanceSheetDict, nwclBalanceSheetDict, nwclIncomeStatementDict, ntcIncomeStatementDict } from '@/lib/gemini/config/dict';
 import { convertToThousands } from '@/utils/math';
 
-const dataDict = (key: string): string => {
-  const name = { ...bankingIncomeStatementDict, ...bankingBalanceSheetDict, ...bankRatiosDict, ...insuranceIncomeStatementDict, ...insuranceBalanceSheetDict, ...nonelifeInsuranceRatiosDict, ...lifeInsuranceRatiosDict, ...htIncomeStatementDict, ...htBalanceSheetDict, ...mpBalanceSheetDict, ...mpIncomeStatementDict }[key];
-  return name ?? "";
+const dataDict = (key: string, sector: string | null, other: string | null): string => {
+  if (sector === null) return key
+  if (sector === "others" && other === null) return key
+  let name: string = "";
+
+  switch (sector) {
+    case "development_banks":
+    case "commercial_banks":
+    case "finance":
+    case "micro_finance":
+      name = { ...bankingIncomeStatementDict, ...bankingBalanceSheetDict, ...bankRatiosDict }[key]
+      break
+    case "life_insurance":
+    case "non_life_insurance":
+      name = { ...insuranceIncomeStatementDict, ...insuranceBalanceSheetDict, ...nonelifeInsuranceRatiosDict, ...lifeInsuranceRatiosDict, }[key]
+      break
+    case "hotels_and_tourism":
+      name = { ...htIncomeStatementDict, ...htBalanceSheetDict, }[key]
+      break
+    case "manufacturing_and_processing":
+      name = { ...mpBalanceSheetDict, ...mpIncomeStatementDict }[key];
+      break;
+    case "others":
+      switch (other) {
+        case "hrl":
+          name = { ...hrlBalanceSheetDict, ...hrlIncomeStatementDict }[key]
+          break
+        case "mkcl":
+          name = { ...mkchBalanceSheetDict, ...mkchIncomeStatementDict }[key]
+          break
+        case "nric":
+          name = { ...nricBalanceSheetDict, ...nricIncomeStatementDict }[key]
+          break
+        case "nrm":
+          name = { ...nrmBalanceSheetDict, ...nrmIncomeStatementDict }[key]
+          break
+        case "ntc":
+          name = { ...ntcBalanceSheetDict, ...ntcIncomeStatementDict }[key]
+          break
+        case "nwcl":
+          name = { ...nwclBalanceSheetDict, ...nwclIncomeStatementDict }[key]
+          break
+      }
+      break
+    default:
+      break
+  }
+  return name || key;
 };
 
 const labelNames: Record<string, string> = { incomeStatement: "Income Statement", balanceSheet: "Balance Sheet", ratios: "Ratios" }
@@ -20,7 +65,7 @@ const sectorOptions: { value: string; label: string }[] = [
   { value: "development_banks", label: "Development Banks" },
   //{ value: "investment", label: "Investment" },
   { value: "life_insurance", label: "Life Insurance" },
-  //{ value: "others", label: "Others" },
+  { value: "others", label: "Others" },
   { value: "non_life_insurance", label: "Non Life Insurance" },
   { value: "finance", label: "Finance" },
   { value: "hotels_and_tourism", label: "Hotels And Tourism" },
@@ -29,6 +74,14 @@ const sectorOptions: { value: string; label: string }[] = [
   //{ value: "hydro_power", label: "Hydro Power" },
   { value: "micro_finance", label: "Micro Finance" },
 ];
+const otherSectorOptions: { value: string; label: string }[] = [
+  { value: "hrl", label: "HRL" },
+  { value: "mkcl", label: "MKCL" },
+  { value: "nric", label: "NRIC" },
+  { value: "nrm", label: "NRM" },
+  { value: "ntc", label: "NTC" },
+  { value: "nwcl", label: "NWCL" },
+]
 
 const IBOptions: { value: string, label: string }[] = [
   { value: 'incomeStatement', label: 'Income Statement' },
@@ -44,7 +97,7 @@ const allOptions: { [key: string]: { value: string, label: string }[] } = {
   development_banks: [...IBROptions], //bankingIncomeStatement , bankingBalanceSheet, bankingRation
   //investment: [...IBOptions],
   life_insurance: [...IBROptions], //InsuranceIncomeStatement , InsuranceBalanceSheet
-  //others: [...IBOptions],
+  others: [...IBOptions],
   non_life_insurance: [...IBROptions], //InsuranceIncomeStatement , InsuranceBalanceSheet
   finance: [...IBROptions], //bankingIncomeStatement , bankingBalanceSheet, bankingRation
 
@@ -69,7 +122,8 @@ const ImageDropzone = () => {
     croppedImage: string;
   }[]>([]);
   const [selectedLabel, setSelectedLabel] = useState('incomeStatement');
-  const [selectedSector, setSelectedSector] = useState('development_banks');
+  const [selectedSector, setSelectedSector] = useState<null | string>(null);
+  const [otherSelectedSector, setotherSelectedSector] = useState<null | string>(null);
   const [isSelectionModalVisible, setIsSelectionModalVisible] = useState(false);
   const [imgRef, setImgRef] = useState<HTMLImageElement | null>(null);
   const [previewVisible, setPreviewVisible] = useState(false);
@@ -117,6 +171,8 @@ const ImageDropzone = () => {
     setOriginalImage(null);
     setCroppedAreas([]);
     setExtractedData(null);
+    setSelectedSector(null)
+    setotherSelectedSector(null)
   };
 
   const handleCropComplete = (crop: PixelCrop) => {
@@ -159,11 +215,15 @@ const ImageDropzone = () => {
         );
 
         const croppedImageUrl = canvas.toDataURL('image/png', 1.0);
-
+        if (selectedSector === null) return
+        if (otherSelectedSector === null) return
+        const sector = selectedSector === "others"
+          ? `${selectedSector}-${otherSelectedSector}`
+          : selectedSector
         setCroppedAreas([...croppedAreas, {
           crop,
           label: selectedLabel,
-          sector: selectedSector,
+          sector: sector,
           croppedImage: croppedImageUrl
         }]);
         setCrop(undefined);
@@ -241,7 +301,7 @@ const ImageDropzone = () => {
     }
   };
   const usedLabels = croppedAreas.map(area => area.label);
-  const availableOptions = allOptions[selectedSector]?.filter(option => !usedLabels.includes(option.value));
+  const availableOptions = selectedSector ? allOptions[selectedSector]?.filter(option => !usedLabels.includes(option.value)) : [{ value: "invalid_sector", label: "invalid sector" }];
 
   return (
     <div className="max-w-7xl mx-auto mb-4 p-8 bg-white rounded-xl shadow-lg mt-8">
@@ -272,6 +332,7 @@ const ImageDropzone = () => {
               <div className="flex items-center gap-4">
                 <Button
                   type="primary"
+                  disabled={selectedSector === null || (selectedSector === 'others' && otherSelectedSector === null)}
                   onClick={() => setIsSelectionModalVisible(true)}
                   size="large"
                   className="bg-blue-500 hover:bg-blue-600"
@@ -286,12 +347,20 @@ const ImageDropzone = () => {
                 </Button>
                 <Select
                   key="section-select"
-                  value={selectedSector}
+                  value={selectedSector || "select sector"}
                   onChange={setSelectedSector}
                   style={{ width: 200 }}
                   options={sectorOptions}
                   size="large"
-                />,
+                />
+                {selectedSector === "others" && <Select
+                  key="other-section-select"
+                  value={otherSelectedSector || "select idk"}
+                  onChange={setotherSelectedSector}
+                  style={{ width: 200 }}
+                  options={otherSectorOptions}
+                  size="large"
+                />}
               </div>
 
               {/* Right Side Toggle Switch */}
@@ -352,7 +421,7 @@ const ImageDropzone = () => {
                         {data.map((item: { [key: string]: string }, id: number) =>
                           Object.entries(item).map(([key, val]: [string, string]) => (
                             <tr key={id + key}>
-                              <td>{dataDict(key) || key}</td>
+                              <td>{dataDict(key, selectedSector, otherSelectedSector) || key}</td>
                               <td>
                                 <Input
                                   value={val}

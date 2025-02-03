@@ -10,8 +10,18 @@ import {
   getInsuranceBalanceSheetData,
   getInsuranceIncomeStatementData,
   getLifeInsuranceRatiosData,
+  getMKCHBalanceSheetData,
+  getMKCHIncomeStatementData,
   getMPBalanceSheetData,
   getMPIncomeStatementData,
+  getNRICBalanceSheetData,
+  getNRICIncomeStatementData,
+  getNRMBalanceSheetData,
+  getNRMIncomeStatementData,
+  getNTCBalanceSheetData,
+  getNTCIncomeStatementData,
+  getNWCLBalanceSheetData,
+  getNWCLIncomeStatementData,
   getNonelifeInsuranceRatiosData,
 } from "../../../lib/gemini/api";
 
@@ -86,7 +96,42 @@ export async function POST(request: Request) {
       case "finance-ratios":
       case "micro_finance-ratios":
         data = await getBankRatiosData(filePath);
-        console.log({ data });
+        break;
+      case "others-htl-incomeStatement":
+        data = await getHTIncomeStatementData(filePath);
+        break;
+      case "others-htl-balanceSheet":
+        data = await getHTBalanceSheetData(filePath);
+        break;
+      case "others-ntc-incomeStatement":
+        data = await getNTCIncomeStatementData(filePath);
+        break;
+      case "others-ntc-balanceSheet":
+        data = await getNTCBalanceSheetData(filePath);
+        break;
+      case "others-nwcl-incomeStatement":
+        data = await getNWCLIncomeStatementData(filePath);
+        break;
+      case "others-nwcl-balanceSheet":
+        data = await getNWCLBalanceSheetData(filePath);
+        break;
+      case "others-nrm-incomeStatement":
+        data = await getNRMIncomeStatementData(filePath);
+        break;
+      case "others-nrm-balanceSheet":
+        data = await getNRMBalanceSheetData(filePath);
+        break;
+      case "others-nric-incomeStatement":
+        data = await getNRICIncomeStatementData(filePath);
+        break;
+      case "others-nric-balanceSheet":
+        data = await getNRICBalanceSheetData(filePath);
+        break;
+      case "others-mkch-incomeStatement":
+        data = await getMKCHIncomeStatementData(filePath);
+        break;
+      case "others-mkch-balanceSheet":
+        data = await getMKCHBalanceSheetData(filePath);
         break;
       default:
         //

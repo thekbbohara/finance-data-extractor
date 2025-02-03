@@ -2,14 +2,26 @@ import {
   bankingBalanceSheetSubCategories,
   bankingIncomeStatementSubCategories,
   bankRatiosSubCategories,
+  hrlBalanceSheetSubCategories,
+  hrlIncomeStatementSubCategories,
   htBalanceSheetSubCategories,
   htIncomeStatementSubCategories,
   insuranceBalanceSheetSubCategories,
   insuranceIncomeStatementSubCategories,
   lifeInsuranceRatiosSubCategories,
+  mkchBalanceSheetSubCategories,
+  mkchIncomeStatementSubCategories,
   mpBalanceSheetSubCategories,
   mpIncomeStatementSubCategories,
   nonelifeInsuranceRatiosSubCategories,
+  nricBalanceSheetSubCategories,
+  nricIncomeStatementSubCategories,
+  nrmBalanceSheetSubCategories,
+  nrmIncomeStatementSubCategories,
+  ntcBalanceSheetSubCategories,
+  ntcIncomeStatementSubCategories,
+  nwclBalanceSheetSubCategories,
+  nwclIncomeStatementSubCategories,
 } from ".";
 
 // current year upto this year bank ->
@@ -26,6 +38,12 @@ NOTE: None of the value is in negative so if you see '-' in the value, it's hyph
 NOTE: Ratio data is in in percentage%
 REMEMBER: Each <sub_category> have their own <bank_current_year_quater>
 REMEMBER: bank_current_year_quater can also have other name like 'First Quarter Ending *','Second Quarter Ending *','Third Quarter Ending *','Fourth Quarter Ending *','Final Quarter Ending *','This Quarter Ending *','Upto This Quarter YTD *',
+Sometimes smame year but different months are give so in that case you will have to extract the latest quarter values.
+fiscal year starts at (Asar | Ashad) is q1
+(Asoj | Aswin) is q2
+(Poush) is q3
+(Chaitra) is q4
+Always prioritize q4 over q3 over q2 over q1
 `;
 
 const quarterly_output_format: string = `
@@ -149,6 +167,107 @@ const mp_balancesheet_labels: string = `
   <sub_category>
 <category>
 `;
+// others
+
+const hrl_incomestatement_labels = `
+<category>
+  <sub_category>
+    ${hrlIncomeStatementSubCategories.join("\n")}
+  </sub_category>
+</category>
+`;
+
+const hrl_balancesheet_labels = `
+<category>
+  <sub_category>
+    ${hrlBalanceSheetSubCategories.join("\n")}
+  </sub_category>
+</category>
+`;
+
+const ntc_incomestatement_labels = `
+<category>
+  <sub_category>
+    ${ntcIncomeStatementSubCategories.join("\n")}
+  </sub_category>
+</category>
+`;
+
+const ntc_balancesheet_labels = `
+<category>
+  <sub_category>
+    ${ntcBalanceSheetSubCategories.join("\n")}
+  </sub_category>
+</category>
+`;
+
+const nwcl_incomestatement_labels = `
+<category>
+  <sub_category>
+    ${nwclIncomeStatementSubCategories.join("\n")}
+  </sub_category>
+</category>
+`;
+
+const nwcl_balancesheet_labels = `
+<category>
+  <sub_category>
+    ${nwclBalanceSheetSubCategories.join("\n")}
+  </sub_category>
+</category>
+`;
+
+// nrm labels
+const nrm_incomestatement_labels = `
+<category>
+  <sub_category>
+    ${nrmIncomeStatementSubCategories.join("\n")}
+  </sub_category>
+</category>
+`;
+
+const nrm_balancesheet_labels = `
+<category>
+  <sub_category>
+    ${nrmBalanceSheetSubCategories.join("\n")}
+  </sub_category>
+</category>
+`;
+
+// nric labels
+const nric_incomestatement_labels = `
+<category>
+  <sub_category>
+    ${nricIncomeStatementSubCategories.join("\n")}
+  </sub_category>
+</category>
+`;
+
+const nric_balancesheet_labels = `
+<category>
+  <sub_category>
+    ${nricBalanceSheetSubCategories.join("\n")}
+  </sub_category>
+</category>
+`;
+
+// mkch labels
+const mkch_incomestatement_labels = `
+<category>
+  <sub_category>
+    ${mkchIncomeStatementSubCategories.join("\n")}
+  </sub_category>
+</category>
+`;
+
+const mkch_balancesheet_labels = `
+<category>
+  <sub_category>
+    ${mkchBalanceSheetSubCategories.join("\n")}
+  </sub_category>
+</category>
+`;
+
 const quarterly_report_instruction = (labels: string) => {
   return `${identification} ${quarterly_report_data_format} ${labels} ${quarterly_output_format}`;
 };
@@ -185,3 +304,35 @@ export const MP_BALANCESHEET_EXTRACTION_INSTRUCTION =
 
 export const MP_INCOMESTATEMENT_EXTRACTION_INSTRUCTION =
   quarterly_report_instruction(mp_incomestatement_labels);
+
+// others
+
+export const HRL_BALANCESHEET_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(hrl_balancesheet_labels);
+export const HRL_INCOMESTATEMENT_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(hrl_incomestatement_labels);
+
+export const NTC_BALANCESHEET_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(ntc_balancesheet_labels);
+export const NTC_INCOMESTATEMENT_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(ntc_incomestatement_labels);
+
+export const NWCL_BALANCESHEET_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(nwcl_balancesheet_labels);
+export const NWCL_INCOMESTATEMENT_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(nwcl_incomestatement_labels);
+
+export const NRM_BALANCESHEET_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(nrm_balancesheet_labels);
+export const NRM_INCOMESTATEMENT_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(nrm_incomestatement_labels);
+
+export const NRIC_BALANCESHEET_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(nric_balancesheet_labels);
+export const NRIC_INCOMESTATEMENT_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(nric_incomestatement_labels);
+
+export const MKCH_BALANCESHEET_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(mkch_balancesheet_labels);
+export const MKCH_INCOMESTATEMENT_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(mkch_incomestatement_labels);
