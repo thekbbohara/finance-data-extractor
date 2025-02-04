@@ -372,7 +372,6 @@ const ImageDropzone = () => {
                     <h1 className="text-lg font-medium mb-4">
                       <strong>
                         {labelNames[label] || label}
-                        {JSON.stringify(extractedChecks)}
                       </strong>
                     </h1>
                     <table border={1} cellPadding="8" style={{ width: "100%", borderCollapse: "collapse" }}>
