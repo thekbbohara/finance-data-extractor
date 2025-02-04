@@ -6,58 +6,11 @@ import Dropzone from "react-dropzone";
 import ReactCrop, { PixelCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import { cn } from '@/utils/cn';
-import { bankingBalanceSheetDict, bankRatiosDict, bankingIncomeStatementDict, insuranceIncomeStatementDict, insuranceBalanceSheetDict, nonelifeInsuranceRatiosDict, lifeInsuranceRatiosDict, htIncomeStatementDict, htBalanceSheetDict, mpBalanceSheetDict, mpIncomeStatementDict, hrlBalanceSheetDict, hrlIncomeStatementDict, mkchBalanceSheetDict, mkchIncomeStatementDict, nricBalanceSheetDict, nricIncomeStatementDict, nrmBalanceSheetDict, nrmIncomeStatementDict, ntcBalanceSheetDict, nwclBalanceSheetDict, nwclIncomeStatementDict, ntcIncomeStatementDict } from '@/lib/gemini/config/dict';
+
 import { convertToThousands } from '@/utils/math';
+import { dataDict } from '@/lib/gemini/config/dict';
 
-const dataDict = (key: string, sector: string | null, other: string | null): string => {
-  if (sector === null) return key
-  if (sector === "others" && other === null) return key
-  let name: string = "";
 
-  switch (sector) {
-    case "development_banks":
-    case "commercial_banks":
-    case "finance":
-    case "micro_finance":
-      name = { ...bankingIncomeStatementDict, ...bankingBalanceSheetDict, ...bankRatiosDict }[key]
-      break
-    case "life_insurance":
-    case "non_life_insurance":
-      name = { ...insuranceIncomeStatementDict, ...insuranceBalanceSheetDict, ...nonelifeInsuranceRatiosDict, ...lifeInsuranceRatiosDict, }[key]
-      break
-    case "hotels_and_tourism":
-      name = { ...htIncomeStatementDict, ...htBalanceSheetDict, }[key]
-      break
-    case "manufacturing_and_processing":
-      name = { ...mpBalanceSheetDict, ...mpIncomeStatementDict }[key];
-      break;
-    case "others":
-      switch (other) {
-        case "hrl":
-          name = { ...hrlBalanceSheetDict, ...hrlIncomeStatementDict }[key]
-          break
-        case "mkcl":
-          name = { ...mkchBalanceSheetDict, ...mkchIncomeStatementDict }[key]
-          break
-        case "nric":
-          name = { ...nricBalanceSheetDict, ...nricIncomeStatementDict }[key]
-          break
-        case "nrm":
-          name = { ...nrmBalanceSheetDict, ...nrmIncomeStatementDict }[key]
-          break
-        case "ntc":
-          name = { ...ntcBalanceSheetDict, ...ntcIncomeStatementDict }[key]
-          break
-        case "nwcl":
-          name = { ...nwclBalanceSheetDict, ...nwclIncomeStatementDict }[key]
-          break
-      }
-      break
-    default:
-      break
-  }
-  return name || key;
-};
 
 const labelNames: Record<string, string> = { incomeStatement: "Income Statement", balanceSheet: "Balance Sheet", ratios: "Ratios" }
 
@@ -97,7 +50,7 @@ const allOptions: { [key: string]: { value: string, label: string }[] } = {
   development_banks: [...IBROptions], //bankingIncomeStatement , bankingBalanceSheet, bankingRation
   //investment: [...IBOptions],
   life_insurance: [...IBROptions], //InsuranceIncomeStatement , InsuranceBalanceSheet
-  others: [...IBOptions],
+  others: [...IBOptions], //**IncomeStatement, **BalanceSheet
   non_life_insurance: [...IBROptions], //InsuranceIncomeStatement , InsuranceBalanceSheet
   finance: [...IBROptions], //bankingIncomeStatement , bankingBalanceSheet, bankingRation
 
@@ -129,6 +82,7 @@ const ImageDropzone = () => {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [extractedData, setExtractedData] = useState<{ [key: string]: { [key: string]: string }[] } | null>(null);
+  const [extractedChecks, setExtractedChecks] = useState<{ [key: string]: { [key: string]: string } } | null>(null);
   const [isInThousands, setIsInThousands] = useState(false);
 
   const handleUpload = async (acceptedFiles: any) => {
@@ -216,7 +170,7 @@ const ImageDropzone = () => {
 
         const croppedImageUrl = canvas.toDataURL('image/png', 1.0);
         if (selectedSector === null) return
-        if (otherSelectedSector === null) return
+        if (selectedSector === "others" && otherSelectedSector === null) return
         const sector = selectedSector === "others"
           ? `${selectedSector}-${otherSelectedSector}`
           : selectedSector
@@ -243,6 +197,7 @@ const ImageDropzone = () => {
     try {
       setLoading(true);
       const results: { [key: string]: { [key: string]: string }[] } = {};
+      const checks: { [key: string]: { [key: string]: string } } = {};
       for (const area of croppedAreas) {
         const response = await fetch('/api/extract', {
           method: 'POST',
@@ -259,10 +214,10 @@ const ImageDropzone = () => {
         const result = await response.json();
         if (result.data) {
           results[area.label] = result.data;
+          checks[area.label] = result.checks;
         }
       }
       if (isInThousands) {
-
         setExtractedData(results);
         return results;
       }
@@ -276,6 +231,7 @@ const ImageDropzone = () => {
         })
       })
       setExtractedData(_results)
+      setExtractedChecks(checks)
       return _results;
 
 
@@ -291,6 +247,13 @@ const ImageDropzone = () => {
   const handleDataChange = (label: string, index: number, key: string, val: string) => {
     const newExtractedData = JSON.parse(JSON.stringify(extractedData));
     newExtractedData[label][index][key] = val;
+    setExtractedChecks(prev => ({
+      ...(prev ?? {}), // If prev is null, default to an empty object
+      [label]: {
+        ...((prev && prev[label]) || {}), // Default to an empty object if prev[label] doesn't exist
+        [key]: "true"
+      }
+    }));
     setExtractedData(newExtractedData);
   };
 
@@ -409,11 +372,13 @@ const ImageDropzone = () => {
                     <h1 className="text-lg font-medium mb-4">
                       <strong>
                         {labelNames[label] || label}
-                      </strong></h1>
+                        {JSON.stringify(extractedChecks)}
+                      </strong>
+                    </h1>
                     <table border={1} cellPadding="8" style={{ width: "100%", borderCollapse: "collapse" }}>
                       <thead>
                         <tr>
-                          <th>Particulars</th>
+                          <th className='w-full flex'><span className='w-fit mr-auto'>Particulars</span></th>
                           <th>2081/82</th>
                         </tr>
                       </thead>
@@ -422,11 +387,11 @@ const ImageDropzone = () => {
                           Object.entries(item).map(([key, val]: [string, string]) => (
                             <tr key={id + key}>
                               <td>{dataDict(key, selectedSector, otherSelectedSector) || key}</td>
-                              <td>
+                              <td >
                                 <Input
                                   value={val}
                                   onChange={e => handleDataChange(label, id, key, e.target.value)}
-                                  className="w-full"
+                                  className={cn(extractedChecks && extractedChecks[label][key] && extractedChecks[label][key] == "false" ? "border border-red-500 focus:border-red-500" : "", "w-full")}
                                 />
                               </td>
                             </tr>

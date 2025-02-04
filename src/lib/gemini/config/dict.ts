@@ -30,19 +30,14 @@ export const bankingIncomeStatementDict: Dict = {
   current_tax: "Current Tax",
   deferred_tax: "Deferred Tax",
   profit_loss_for_the_period: "Net Profit",
-  profit_or_loss_for_the_period: "Net Profit",
   impairment_charge_or_reversal_for_loans_and_other_losses:
     "Impairment charge/(reversal) for loans and other losses",
-  personnel_expenses: "Personnel Expenses",
-  depreciation_and_amortization: "Depreciation and Amortization",
 };
 export const bankingBalanceSheetDict: Dict = {
   cash_and_cash_equivalents: "Cash and Cash Equivalents",
-  cash_and_cash_equivalent: "Cash and Cash Equivalents",
   due_from_nepal_rastra_bank: "Due from Nepal Rastra Bank",
   placement_with_bank_and_financial_institutions:
     "Placement with Bank and Financial Institutions",
-  placement_with_bank_and_fis: "Placement with Bank and Financial Institutions",
   derivative_financial_instruments: "Derivative Financial Instruments",
   assets_derivative_financial_instruments:
     "Assets: Derivative Financial Instruments",
@@ -140,6 +135,7 @@ export const insuranceIncomeStatementDict: Dict = {
   net_earned_premiums: "Net Earned Premiums",
   commission_income: "Commission Income",
   other_direct_income: "Other Direct Income",
+  income_from_investments_and_loans: "Income from Investments & Loans",
   net_gain_loss_on_fair_value_changes: "Net Gain/ (Loss) on Fair Value Changes",
   net_realised_gains_losses: "Net Realised Gains/ (Losses)",
   other_income: "Other Income",
@@ -342,7 +338,7 @@ export const hrlIncomeStatementDict: Dict = {
   net_earned_premiums: "Net Earned Premiums",
   commission_income: "Commission Income",
   other_direct_income: "Other Direct Income",
-  income_from_investments_and_loans: "Income from Investments and Loans",
+  income_from_investments_and_loans: "Income from Investments & Loans",
   net_gain_loss_on_fair_value_changes: "Net Gain/(Loss) on Fair Value Changes",
   net_realised_gains_losses: "Net Realised Gains/(Losses)",
   other_income: "Other Income",
@@ -692,4 +688,67 @@ export const nwclIncomeStatementDict: Dict = {
   current_tax: "Current Tax",
   deferred_tax_income_expense: "Deferred Tax Income (Expense)",
   net_profit_loss_after_tax: "Net Profit/(Loss) after Tax",
+};
+
+export const dataDict = (
+  key: string,
+  sector: string | null,
+  other: string | null,
+): string => {
+  if (sector === null) return key;
+  if (sector === "others" && other === null) return key;
+  let name: string = "";
+
+  switch (sector) {
+    case "development_banks":
+    case "commercial_banks":
+    case "finance":
+    case "micro_finance":
+      name = {
+        ...bankingIncomeStatementDict,
+        ...bankingBalanceSheetDict,
+        ...bankRatiosDict,
+      }[key];
+      break;
+    case "life_insurance":
+    case "non_life_insurance":
+      name = {
+        ...insuranceIncomeStatementDict,
+        ...insuranceBalanceSheetDict,
+        ...nonelifeInsuranceRatiosDict,
+        ...lifeInsuranceRatiosDict,
+      }[key];
+      break;
+    case "hotels_and_tourism":
+      name = { ...htIncomeStatementDict, ...htBalanceSheetDict }[key];
+      break;
+    case "manufacturing_and_processing":
+      name = { ...mpBalanceSheetDict, ...mpIncomeStatementDict }[key];
+      break;
+    case "others":
+      switch (other) {
+        case "hrl":
+          name = { ...hrlBalanceSheetDict, ...hrlIncomeStatementDict }[key];
+          break;
+        case "mkcl":
+          name = { ...mkchBalanceSheetDict, ...mkchIncomeStatementDict }[key];
+          break;
+        case "nric":
+          name = { ...nricBalanceSheetDict, ...nricIncomeStatementDict }[key];
+          break;
+        case "nrm":
+          name = { ...nrmBalanceSheetDict, ...nrmIncomeStatementDict }[key];
+          break;
+        case "ntc":
+          name = { ...ntcBalanceSheetDict, ...ntcIncomeStatementDict }[key];
+          break;
+        case "nwcl":
+          name = { ...nwclBalanceSheetDict, ...nwclIncomeStatementDict }[key];
+          break;
+      }
+      break;
+    default:
+      break;
+  }
+  return name || key;
 };

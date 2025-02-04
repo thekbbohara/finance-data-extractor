@@ -24,6 +24,11 @@ import {
   getNWCLIncomeStatementData,
   getNonelifeInsuranceRatiosData,
 } from "../../../lib/gemini/api";
+import { compareTotal } from "@/utils/math";
+import {
+  insuranceBalanceSheetChecks,
+  insuranceIncomeStatementChecks,
+} from "@/lib/gemini/config/checks/insurance";
 
 export async function POST(request: Request) {
   try {
@@ -47,6 +52,7 @@ export async function POST(request: Request) {
     await fs.writeFile(filePath, buffer); // Use async writeFile
 
     let data = null;
+    let checks = null;
     console.log(
       "Call appropriate extractor based on label",
       `${sector}-${label}`,
@@ -74,10 +80,12 @@ export async function POST(request: Request) {
       case "non_life_insurance-balanceSheet":
       case "life_insurance-balanceSheet":
         data = await getInsuranceBalanceSheetData(filePath);
+        checks = compareTotal(data, insuranceBalanceSheetChecks);
         break;
       case "non_life_insurance-incomeStatement":
       case "life_insurance-incomeStatement":
         data = await getInsuranceIncomeStatementData(filePath);
+        checks = compareTotal(data, insuranceIncomeStatementChecks);
         break;
       case "non_life_insurance-ratios":
         data = await getNonelifeInsuranceRatiosData(filePath);
@@ -153,7 +161,7 @@ export async function POST(request: Request) {
       );
     }
 
-    return NextResponse.json({ data });
+    return NextResponse.json({ data, checks });
   } catch (error) {
     console.error("Error processing request:", error);
     return NextResponse.json(

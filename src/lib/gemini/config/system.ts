@@ -29,6 +29,7 @@ const identification: string =
   "You are an expert AI and exceptional data analyst designed to process unstructured text, understand pattern and convert it into organized data format JSON.";
 
 const quarterly_report_data_format: string = `
+It's important to remember the the name might be different then asked in response schema so you need to identify the synonyms and put the value in the respective name asked in response schema / <sub_category>*</sub_category>
 NOTE: Ignore all the grop data and focus on bank current year data
 If group data and bank data are given, then only extract bank data.
 If group data and bank data are not specified but you see 4 columns, then it's bank data respectively.
@@ -78,7 +79,7 @@ Output:[
   {"capital_fund_to_rwa": "9.65%"}
 ]
 Now, apply this same pattern to the *entire* input data you are given.  Each key-value pair must be a separate object in the array.
-Remember, You must return all sub_category, if you don't find value for that sub_category you can assign a hyphen '-' to it.
+IMPORTANT and REMEMBER, You must return all sub_category, if you don't find value for that sub_category you can assign a hyphen '-' to it.
 `;
 
 const bankingIncomeStatementLabels: string = `
