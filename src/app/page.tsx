@@ -214,7 +214,7 @@ const ImageDropzone = () => {
         const result = await response.json();
         if (result.data) {
           results[area.label] = result.data;
-          checks[area.label] = result.checks;
+          checks[area.label] = result.checks ?? {};
         }
       }
       if (isInThousands) {
