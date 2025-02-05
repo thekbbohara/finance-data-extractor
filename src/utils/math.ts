@@ -43,12 +43,12 @@ const parseFormattedNumber = (value: string): number => {
 
   // If the value is wrapped in parentheses, treat it as negative.
   let cleanedValue = value;
-  if (value.startsWith("(") && value.endsWith(")")) {
+  if (String(value).startsWith("(") && String(value).endsWith(")")) {
     cleanedValue = `-${value.slice(1, -1)}`;
   }
 
   // Remove any commas and parse the float.
-  return parseFloat(cleanedValue.replace(/,/g, ""));
+  return parseFloat(String(cleanedValue).replace(/,/g, ""));
 };
 
 export const checkTotal = (

@@ -80,6 +80,7 @@ Output:[
 ]
 Now, apply this same pattern to the *entire* input data you are given.  Each key-value pair must be a separate object in the array.
 IMPORTANT and REMEMBER, You must return all sub_category, if you don't find value for that sub_category you can assign a hyphen '-' to it.
+MAKE SURE to not send duplicate keys/(</sub_category>)
 `;
 
 const bankingIncomeStatementLabels: string = `
