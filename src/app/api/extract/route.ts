@@ -5,6 +5,8 @@ import {
   getBalanceSheetData,
   getBankRatiosData,
   getBankingIncomeStatement,
+  getHRLBalanceSheetData,
+  getHRLIncomeStatementData,
   getHTBalanceSheetData,
   getHTIncomeStatementData,
   getInsuranceBalanceSheetData,
@@ -29,6 +31,42 @@ import {
   insuranceBalanceSheetChecks,
   insuranceIncomeStatementChecks,
 } from "@/lib/gemini/config/checks/insurance";
+import {
+  bankingBalanceSheetChecks,
+  bankingIncomeStatementChecks,
+} from "@/lib/gemini/config/checks/banking";
+import {
+  htBalanceSheetChecks,
+  htIncomeStatementChecks,
+} from "@/lib/gemini/config/checks/ht";
+import {
+  mpBalanceSheetChecks,
+  mpIncomeStatementChecks,
+} from "@/lib/gemini/config/checks/mp";
+import {
+  hrlBalanceSheetChecks,
+  hrlIncomeStatementChecks,
+} from "@/lib/gemini/config/checks/hrl";
+import {
+  ntcBalanceSheetChecks,
+  ntcIncomeStatementChecks,
+} from "@/lib/gemini/config/checks/ntc";
+import {
+  mkchBalanceSheetChecks,
+  mkchIncomeStatementChecks,
+} from "@/lib/gemini/config/checks/mkch";
+import {
+  nricBalanceSheetChecks,
+  nricIncomeStatementChecks,
+} from "@/lib/gemini/config/checks/nric";
+import {
+  nrmBalanceSheetChecks,
+  nrmIncomeStatementChecks,
+} from "@/lib/gemini/config/checks/nrm";
+import {
+  nwclBalanceSheetChecks,
+  nwclIncomeStatementChecks,
+} from "@/lib/gemini/config/checks/nwcl";
 
 export async function POST(request: Request) {
   try {
@@ -61,21 +99,26 @@ export async function POST(request: Request) {
     switch (`${sector}-${label}`) {
       case "hotels_and_tourism-incomeStatement":
         data = await getHTIncomeStatementData(filePath);
+        checks = compareTotal(data, htIncomeStatementChecks);
         break;
       case "hotels_and_tourism-balanceSheet":
         data = await getHTBalanceSheetData(filePath);
+        checks = compareTotal(data, htBalanceSheetChecks);
         break;
       case "manufacturing_and_processing-incomeStatement":
         data = await getMPIncomeStatementData(filePath);
+        checks = compareTotal(data, mpIncomeStatementChecks);
         break;
       case "manufacturing_and_processing-balanceSheet":
         data = await getMPBalanceSheetData(filePath);
+        checks = compareTotal(data, mpBalanceSheetChecks);
         break;
       case "development_banks-incomeStatement":
       case "commercial_banks-incomeStatement":
       case "finance-incomeStatement":
       case "micro_finance-incomeStatement":
         data = await getBankingIncomeStatement(filePath);
+        checks = compareTotal(data, bankingIncomeStatementChecks);
         break;
       case "non_life_insurance-balanceSheet":
       case "life_insurance-balanceSheet":
@@ -98,6 +141,7 @@ export async function POST(request: Request) {
       case "finance-balanceSheet":
       case "micro_finance-balanceSheet":
         data = await getBalanceSheetData(filePath);
+        checks = compareTotal(data, bankingBalanceSheetChecks);
         break;
       case "development_banks-ratios":
       case "commercial_banks-ratios":
@@ -105,41 +149,53 @@ export async function POST(request: Request) {
       case "micro_finance-ratios":
         data = await getBankRatiosData(filePath);
         break;
-      case "others-htl-incomeStatement":
-        data = await getHTIncomeStatementData(filePath);
+      case "others-hrl-incomeStatement":
+        data = await getHRLIncomeStatementData(filePath);
+        checks = compareTotal(data, hrlIncomeStatementChecks);
         break;
-      case "others-htl-balanceSheet":
-        data = await getHTBalanceSheetData(filePath);
+      case "others-hrl-balanceSheet":
+        data = await getHRLBalanceSheetData(filePath);
+        checks = compareTotal(data, hrlBalanceSheetChecks);
         break;
       case "others-ntc-incomeStatement":
         data = await getNTCIncomeStatementData(filePath);
+        checks = compareTotal(data, ntcIncomeStatementChecks);
         break;
       case "others-ntc-balanceSheet":
         data = await getNTCBalanceSheetData(filePath);
+        checks = compareTotal(data, ntcBalanceSheetChecks);
         break;
       case "others-nwcl-incomeStatement":
         data = await getNWCLIncomeStatementData(filePath);
+        checks = compareTotal(data, nwclIncomeStatementChecks);
         break;
       case "others-nwcl-balanceSheet":
         data = await getNWCLBalanceSheetData(filePath);
+        checks = compareTotal(data, nwclBalanceSheetChecks);
         break;
       case "others-nrm-incomeStatement":
         data = await getNRMIncomeStatementData(filePath);
+        checks = compareTotal(data, nrmIncomeStatementChecks);
         break;
       case "others-nrm-balanceSheet":
         data = await getNRMBalanceSheetData(filePath);
+        checks = compareTotal(data, nrmBalanceSheetChecks);
         break;
       case "others-nric-incomeStatement":
         data = await getNRICIncomeStatementData(filePath);
+        checks = compareTotal(data, nricIncomeStatementChecks);
         break;
       case "others-nric-balanceSheet":
         data = await getNRICBalanceSheetData(filePath);
+        checks = compareTotal(data, nricBalanceSheetChecks);
         break;
       case "others-mkch-incomeStatement":
         data = await getMKCHIncomeStatementData(filePath);
+        checks = compareTotal(data, mkchIncomeStatementChecks);
         break;
       case "others-mkch-balanceSheet":
         data = await getMKCHBalanceSheetData(filePath);
+        checks = compareTotal(data, mkchBalanceSheetChecks);
         break;
       default:
         //
