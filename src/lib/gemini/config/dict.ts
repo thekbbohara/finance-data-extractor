@@ -1,5 +1,6 @@
 // Original name
 export type Dict = { [key: string]: string };
+
 export const bankingIncomeStatementDict: Dict = {
   interest_income: "Interest Income",
   interest_expense: "Interest Expense",

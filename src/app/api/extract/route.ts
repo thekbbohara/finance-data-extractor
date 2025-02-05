@@ -80,6 +80,7 @@ import {
   hydroBalanceSheetChecks,
   hydroIncomeStatementChecks,
 } from "@/lib/gemini/config/checks/hydro";
+import { Dict } from "@/lib/gemini/config/dict";
 
 export async function POST(request: Request) {
   try {
@@ -248,8 +249,17 @@ export async function POST(request: Request) {
         { status: 500 },
       );
     }
-
-    return NextResponse.json({ data, checks });
+    const uniqueData: Dict[] = Object.values(
+      data.reduce(
+        (acc: Record<string, Dict>, obj: Dict) => {
+          const key = Object.keys(obj)[0];
+          acc[key] = obj;
+          return acc;
+        },
+        {} as Record<string, Dict>,
+      ),
+    );
+    return NextResponse.json({ data: uniqueData, checks });
   } catch (error) {
     console.error("Error processing request:", error);
     return NextResponse.json(
