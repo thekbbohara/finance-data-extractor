@@ -6,8 +6,13 @@ import {
   hrlIncomeStatementSubCategories,
   htBalanceSheetSubCategories,
   htIncomeStatementSubCategories,
+  hydroBalanceSheetSubCategories,
+  hydroIncomeStatementSubCategories,
   insuranceBalanceSheetSubCategories,
   insuranceIncomeStatementSubCategories,
+  investmentBalanceSheetSubCategories,
+  investmentIncomeStatementSubCategories,
+  investmentRatiosSubCategories,
   lifeInsuranceRatiosSubCategories,
   mkchBalanceSheetSubCategories,
   mkchIncomeStatementSubCategories,
@@ -169,6 +174,58 @@ const mp_balancesheet_labels: string = `
   <sub_category>
 <category>
 `;
+const investment_extra_instruction = `
+Investment data might me in nepali / english or both mixed.
+In such scenario you need to identify value for asked sub_category and assign value to it.
+if you could not identify value of some sub_category just assign a hyphen (-)
+`;
+const investment_incomestatement_labels = `
+${investment_extra_instruction}
+<category>
+  <sub_category>
+    ${investmentIncomeStatementSubCategories.join("\n")}
+  </sub_category>
+</category>
+`;
+
+const investment_balancesheet_labels = `
+${investment_extra_instruction}
+<category>
+  <sub_category>
+    ${investmentBalanceSheetSubCategories.join("\n")}
+  </sub_category>
+</category>
+`;
+
+const investment_ratios_labels = `
+${investment_extra_instruction}
+<category>
+  <sub_category>
+    ${investmentRatiosSubCategories.join("\n")}
+  </sub_category>
+</category>
+`;
+// hydro
+const hydro_extra_instruction = `
+Be mindfull of synonyms while extracting, it may be not labled as asked in <sub_category>*</sub_category> so first understand the synonyms and then assign it's value to respective <sub_category>
+`;
+const hydro_incomestatement_labels = `
+${hydro_extra_instruction}
+<category>
+  <sub_category>
+    ${hydroIncomeStatementSubCategories.join("\n")}
+  </sub_category>
+</category>
+`;
+
+const hydro_balancesheet_labels = `
+${investment_extra_instruction}
+<category>
+  <sub_category>
+    ${hydroBalanceSheetSubCategories.join("\n")}
+  </sub_category>
+</category>
+`;
 // others
 
 const hrl_incomestatement_labels = `
@@ -306,6 +363,21 @@ export const MP_BALANCESHEET_EXTRACTION_INSTRUCTION =
 
 export const MP_INCOMESTATEMENT_EXTRACTION_INSTRUCTION =
   quarterly_report_instruction(mp_incomestatement_labels);
+
+export const INVESTMENT_BALANCESHEET_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(investment_balancesheet_labels);
+
+export const INVESTMENT_INCOMESTATEMENT_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(investment_incomestatement_labels);
+
+export const INVESTMENT_RATIOS_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(investment_ratios_labels);
+
+export const HYDRO_BALANCESHEET_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(hydro_balancesheet_labels);
+
+export const HYDRO_INCOMESTATEMENT_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(hydro_incomestatement_labels);
 
 // others
 

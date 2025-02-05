@@ -9,8 +9,13 @@ import {
   getHRLIncomeStatementData,
   getHTBalanceSheetData,
   getHTIncomeStatementData,
+  getHydroBalanceSheetData,
+  getHydroIncomeStatementData,
   getInsuranceBalanceSheetData,
   getInsuranceIncomeStatementData,
+  getInvestmentBalanceSheetData,
+  getInvestmentIncomeStatementData,
+  getInvestmentRatiosData,
   getLifeInsuranceRatiosData,
   getMKCHBalanceSheetData,
   getMKCHIncomeStatementData,
@@ -67,6 +72,14 @@ import {
   nwclBalanceSheetChecks,
   nwclIncomeStatementChecks,
 } from "@/lib/gemini/config/checks/nwcl";
+import {
+  investmentBalanceSheetChecks,
+  investmentIncomeStatementChecks,
+} from "@/lib/gemini/config/checks/investment";
+import {
+  hydroBalanceSheetChecks,
+  hydroIncomeStatementChecks,
+} from "@/lib/gemini/config/checks/hydro";
 
 export async function POST(request: Request) {
   try {
@@ -97,6 +110,14 @@ export async function POST(request: Request) {
     );
 
     switch (`${sector}-${label}`) {
+      case "hydro_power-incomeStatement":
+        data = await getHydroIncomeStatementData(filePath);
+        checks = compareTotal(data, hydroIncomeStatementChecks);
+        break;
+      case "hydro_power-balanceSheet":
+        data = await getHydroBalanceSheetData(filePath);
+        checks = compareTotal(data, hydroBalanceSheetChecks);
+        break;
       case "hotels_and_tourism-incomeStatement":
         data = await getHTIncomeStatementData(filePath);
         checks = compareTotal(data, htIncomeStatementChecks);
@@ -135,6 +156,17 @@ export async function POST(request: Request) {
         break;
       case "life_insurance-ratios":
         data = await getLifeInsuranceRatiosData(filePath);
+        break;
+      case "investment-incomeStatement":
+        data = await getInvestmentIncomeStatementData(filePath);
+        checks = compareTotal(data, investmentIncomeStatementChecks);
+        break;
+      case "investment-balanceSheet":
+        data = await getInvestmentBalanceSheetData(filePath);
+        checks = compareTotal(data, investmentBalanceSheetChecks);
+        break;
+      case "investment-ratios":
+        data = await getInvestmentRatiosData(filePath);
         break;
       case "development_banks-balanceSheet":
       case "commercial_banks-balanceSheet":

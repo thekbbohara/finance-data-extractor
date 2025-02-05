@@ -12,8 +12,13 @@ import {
   hrlIncomeStatementDict,
   htBalanceSheetDict,
   htIncomeStatementDict,
+  hydroBalanceSheetDict,
+  hydroIncomeStatementDict,
   insuranceBalanceSheetDict,
   insuranceIncomeStatementDict,
+  investmentBalanceSheetDict,
+  investmentIncomeStatementDict,
+  investmentRatiosDict,
   lifeInsuranceRatiosDict,
   mkchBalanceSheetDict,
   mkchIncomeStatementDict,
@@ -99,6 +104,26 @@ export const [
 
 export const [lifeInsuranceRatiosSubCategories, lifeInsuranceRatiosConfig] =
   genConf(lifeInsuranceRatiosDict);
+
+// investment
+export const [
+  investmentIncomeStatementSubCategories,
+  investmentIncomeStatementConfig,
+] = genConf(investmentIncomeStatementDict);
+
+export const [
+  investmentBalanceSheetSubCategories,
+  investmentBalanceSheetConfig,
+] = genConf(investmentBalanceSheetDict);
+
+export const [investmentRatiosSubCategories, investmentRatiosConfig] =
+  genConf(investmentRatiosDict);
+// hydro
+export const [hydroIncomeStatementSubCategories, hydroIncomeStatementConfig] =
+  genConf(hydroIncomeStatementDict);
+
+export const [hydroBalanceSheetSubCategories, hydroBalanceSheetConfig] =
+  genConf(hydroBalanceSheetDict);
 
 // Others
 export const [htBalanceSheetSubCategories, htBalanceSheetConfig] =

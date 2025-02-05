@@ -9,8 +9,13 @@ import {
   hrlIncomeStatementConfig,
   htBalanceSheetConfig,
   htIncomeStatementConfig,
+  hydroBalanceSheetConfig,
+  hydroIncomeStatementConfig,
   insuranceBalanceSheetConfig,
   insuranceIncomeStatementConfig,
+  investmentBalanceSheetConfig,
+  investmentIncomeStatementConfig,
+  investmentRatiosConfig,
   mkchBalanceSheetConfig,
   mkchIncomeStatementConfig,
   mpBalanceSheetConfig,
@@ -34,8 +39,13 @@ import {
   HRL_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
   HT_BALANCESHEET_EXTRACTION_INSTRUCTION,
   HT_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
+  HYDRO_BALANCESHEET_EXTRACTION_INSTRUCTION,
+  HYDRO_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
   INSURANCE_BALANCESHEET_EXTRACTION_INSTRUCTION,
   INSURANCE_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
+  INVESTMENT_BALANCESHEET_EXTRACTION_INSTRUCTION,
+  INVESTMENT_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
+  INVESTMENT_RATIOS_EXTRACTION_INSTRUCTION,
   LIFE_INSURANCE_RATIOS_EXTRACTION_INSTRUCTION,
   MKCH_BALANCESHEET_EXTRACTION_INSTRUCTION,
   MKCH_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
@@ -185,7 +195,37 @@ export const getMPIncomeStatementData = createExtractor(
   mpIncomeStatementConfig,
   "mp_incomestatement_config",
 );
-
+export const getInvestmentIncomeStatementData = createExtractor(
+  INVESTMENT_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
+  "Extract respective data from given image",
+  investmentIncomeStatementConfig,
+  "investment_incomestatement_config",
+);
+export const getInvestmentBalanceSheetData = createExtractor(
+  INVESTMENT_BALANCESHEET_EXTRACTION_INSTRUCTION,
+  "Extract respective data from given image",
+  investmentBalanceSheetConfig,
+  "investment_balancesheet_config",
+);
+export const getInvestmentRatiosData = createExtractor(
+  INVESTMENT_RATIOS_EXTRACTION_INSTRUCTION,
+  "Extract respective data from given image",
+  investmentRatiosConfig,
+  "investment_ratios_config",
+);
+//hydro
+export const getHydroIncomeStatementData = createExtractor(
+  HYDRO_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
+  "Extract respective data from given image",
+  hydroIncomeStatementConfig,
+  "hydro_incomestatement_config",
+);
+export const getHydroBalanceSheetData = createExtractor(
+  HYDRO_BALANCESHEET_EXTRACTION_INSTRUCTION,
+  "Extract respective data from given image",
+  hydroBalanceSheetConfig,
+  "hydro_balancesheet_config",
+);
 // others
 export const getHRLIncomeStatementData = createExtractor(
   HRL_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,

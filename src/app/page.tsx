@@ -16,7 +16,7 @@ const labelNames: Record<string, string> = { incomeStatement: "Income Statement"
 
 const sectorOptions: { value: string; label: string }[] = [
   { value: "development_banks", label: "Development Banks" },
-  //{ value: "investment", label: "Investment" },
+  { value: "investment", label: "Investment" },
   { value: "life_insurance", label: "Life Insurance" },
   { value: "others", label: "Others" },
   { value: "non_life_insurance", label: "Non Life Insurance" },
@@ -24,7 +24,7 @@ const sectorOptions: { value: string; label: string }[] = [
   { value: "hotels_and_tourism", label: "Hotels And Tourism" },
   { value: "commercial_banks", label: "Commercial Banks" },
   { value: "manufacturing_and_processing", label: "Manufacturing And Processing" },
-  //{ value: "hydro_power", label: "Hydro Power" },
+  { value: "hydro_power", label: "Hydro Power" },
   { value: "micro_finance", label: "Micro Finance" },
 ];
 const otherSectorOptions: { value: string; label: string }[] = [
@@ -48,7 +48,7 @@ const IBROptions: { value: string, label: string }[] = [
 
 const allOptions: { [key: string]: { value: string, label: string }[] } = {
   development_banks: [...IBROptions], //bankingIncomeStatement , bankingBalanceSheet, bankingRation
-  //investment: [...IBOptions],
+  investment: [...IBROptions],
   life_insurance: [...IBROptions], //InsuranceIncomeStatement , InsuranceBalanceSheet
   others: [...IBOptions], //**IncomeStatement, **BalanceSheet
   non_life_insurance: [...IBROptions], //InsuranceIncomeStatement , InsuranceBalanceSheet
@@ -58,7 +58,7 @@ const allOptions: { [key: string]: { value: string, label: string }[] } = {
   commercial_banks: [...IBROptions], //bankingIncomeStatement , bankingBalanceSheet, bankingRation
 
   manufacturing_and_processing: [...IBOptions], //mpBalanceSheet , mpIncomeStatement
-  //hydro_power: [...IBOptions],
+  hydro_power: [...IBOptions],
   micro_finance: [...IBROptions] //bankingIncomeStatement , bankingBalanceSheet, bankingRation
 
 }

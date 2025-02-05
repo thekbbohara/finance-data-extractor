@@ -329,6 +329,129 @@ export const mpBalanceSheetDict: Dict = {
   other_non_current_liabilities: "Other Non-Current Liabilities",
   total_non_current_liabilities: "Total Non Current Liabilities",
 };
+// investments
+export const investmentIncomeStatementDict: Dict = {
+  interest_income: "Interest Income",
+  dividend_income: "Dividend Income",
+  fees_and_commission_income: "Fees and Commission Income",
+  other_income: "Other Income",
+  total_income: "Total Income",
+  operational_expenses: "Operational Expenses",
+  provisions_for_investment_risks_and_other_losses:
+    "Provisions for Investment Risks and Other Losses",
+  misc_expenses: "Misc Expenses",
+  total_operating_expenses: "Total operating Expenses",
+  ebitda: "EBITDA",
+  depreciation_and_amortization: "Depreciation and Amortization",
+  ebit: "EBIT",
+  financial_expenses: "Financial Expenses",
+  profit_before_bonus_and_taxes: "Profit Before Bonus and Taxes",
+  provision_for_bonus: "Provision for Bonus",
+  profit_before_taxes: "Profit Before Taxes",
+  provision_for_taxes: "Provision for Taxes",
+  net_profit: "Net Profit",
+};
+export const investmentBalanceSheetDict: Dict = {
+  property_plant_and_equipment: "Property, Plant & Equipment",
+  accumulated_depreciation: "Accumulated Depreciation",
+  net_fixed_assets: "Net Fixed Assets",
+  investments: "Investments",
+  loans_extended: "Loans Extended",
+  cash_and_cash_equivalents: "Cash and Cash Equivalents",
+  term_deposits: "Term Deposits",
+  other_current_assets: "Other Current Assets",
+  misc_assets: "Misc Assets",
+  total_uses_of_funds: "Total Uses of Funds",
+  fund_deposits: "Fund Deposits",
+  loans: "Loans",
+  total_long_term_liabilities: "Total Long Term Liabilities",
+  current_liabilities_and_provision: "Currrent Liabilities and Provision",
+  trade_and_other_payables: "Trade and Other Payables",
+  dividend_payable: "Dividend Payable",
+  other_liabilities_and_provisions: "Other Liabilities and Provisions",
+  corporate_income_tax_liabilities: "Corporate Income Tax Liabilities",
+  provisions_for_possible_losses: "Provisions for Possible Losses",
+  current_liabilities_and_provisions: "Current Liabilities and Provisions",
+  total_sources_of_funds: "Total Sources of Funds",
+  paid_up_capital: "Paid Up Capital",
+  share_premium: "Share Premium",
+  preference_shares: "Preference Shares",
+  reserves_and_surplus: "ReservesAndSurplus",
+  total_equity: "Total Equity",
+};
+export const investmentRatiosDict: Dict = {
+  earnings_per_share: "Earnings Per Share",
+  book_value_per_share: "Book Value per Share",
+  return_on_equity: "Return on Equity",
+  return_on_asset: "Return on Asset",
+  return_on_investment: "Return on Investment",
+  operating_profit_margin: "Operating Profit Margin",
+  net_profit_margin: "Net Profit Margin",
+  market_cap: "Market Cap",
+  price_earnings: "Price/Earnings",
+  price_book: "Price/Book",
+};
+// hydro
+export const hydroBalanceSheetDict: Dict = {
+  share_capital: "Share Capital",
+  premium: "Premium",
+  reserves: "Reserves",
+  long_term_liabilities: "Long Term Liabilities",
+  total_funds: "Total Funds",
+  fixed_assets: "Fixed Assets",
+  depreciation: "Depreciation",
+  net_fixed_assets: "Net Fixed Assets",
+  non_core_assets: "Non Core Assets",
+  investments: "Investments",
+  work_in_progress: "Work In Progress",
+  cash: "Cash",
+  receivables: "Receivables",
+  advances_prepayments_loans_deposits_and_other_current_assets:
+    "Advances Prepayments Loans Deposits and other Current Assets",
+  inventory: "Inventory",
+  total_current_assets: "Total Current Assets",
+  short_term_liabilities: "Short Term Liabilities",
+  deferred_liabilities: "Deferred Liabilities",
+  total_short_term_liabilities: "Total Short-Term Liabilities",
+  application_of_funds: "Application of Funds",
+};
+export const hydroIncomeStatementDict: Dict = {
+  energy_sales: "Energy Sales",
+  cost_of_production: "Cost of Production",
+  gross_profit: "Gross Profit",
+  dividend_income: "Dividend Income",
+  forex_gain_loss: "Forex Gain/Loss",
+  other_income: "Other Income",
+  admin_expenses: "Admin Expenses",
+  operating_profit: "Operating Profit",
+  interest_expense: "Interest Expense",
+  depreciation: "Depreciation",
+  provisions: "Provisions",
+  profit_before_tax: "Profit Before Tax",
+  taxes: "Taxes",
+  bonus_and_csr: "Bonus and CSR",
+  net_profit: "Net Profit",
+  profitability_ratios: "Profitability Ratios",
+  earnings_per_share: "Earnings Per Share",
+  book_value_per_share: "Book Value per Share",
+  ebitda: "EBITDA",
+  gross_profit_margin: "Gross Profit Margin",
+  operating_profit_margin: "Operating Profit Margin",
+  net_profit_margin: "Net Profit Margin",
+  management_efficiency_ratios: "Management Efficiency Ratios",
+  return_on_equity: "Return on Equity",
+  return_on_asset: "Return on Asset",
+  return_on_capital_employed: "Return on Capital Employed",
+  debt_equity: "Debt-Equity",
+  current_ratio: "Current Ratio",
+  valuation_ratios: "Valuation Ratios",
+  market_cap: "Market Cap",
+  enterprise_value_ev: "Enterprise Value (EV)",
+  price_earnings: "Price/Earnings",
+  price_book: "Price/Book",
+  price_revenue: "Price/Revenue",
+  ev_ebitda: "Ev/EBITDA",
+};
 
 // others
 
@@ -725,6 +848,21 @@ export const dataDict = (
     case "manufacturing_and_processing":
       name = { ...mpBalanceSheetDict, ...mpIncomeStatementDict }[key];
       break;
+    case "investment":
+      name = {
+        ...investmentIncomeStatementDict,
+        ...investmentBalanceSheetDict,
+        ...investmentRatiosDict,
+      }[key];
+
+      break;
+    case "hydro_power":
+      name = {
+        ...hydroIncomeStatementDict,
+        ...hydroBalanceSheetDict,
+      }[key];
+      break;
+
     case "others":
       switch (other) {
         case "hrl":
