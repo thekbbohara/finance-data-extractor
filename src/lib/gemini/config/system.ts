@@ -31,61 +31,48 @@ import {
 
 // current year upto this year bank ->
 const identification: string =
-  "You are an expert AI and exceptional data analyst designed to process unstructured text, understand pattern and convert it into organized data format JSON.";
+  "You are an expert AI and exceptional data analyst designed to process unstructured text, understand patterns, and convert them into organized data format JSON.";
 
 const quarterly_report_data_format: string = `
-It's important to remember the the name might be different then asked in response schema so you need to identify the synonyms and put the value in the respective name asked in response schema / <sub_category>*</sub_category>
-NOTE: Ignore all the grop data and focus on bank current year data
-If group data and bank data are given, then only extract bank data.
-If group data and bank data are not specified but you see 4 columns, then it's bank data respectively.
-If group data and bank data are not specified but you see 8 columns, last 4 columns are bank data respectively.
-IMPORTANT: Look for data mentiond below <category>,<sub_category>,<bank_current_year_quater>,<bank_current_year_ytd>
-NOTE: None of the value is in negative so if you see '-' in the value, it's hyphen not negative value and there is nothing in that cell.
-NOTE: Ratio data is in in percentage%
-REMEMBER: Each <sub_category> have their own <bank_current_year_quater>
-REMEMBER: bank_current_year_quater can also have other name like 'First Quarter Ending *','Second Quarter Ending *','Third Quarter Ending *','Fourth Quarter Ending *','Final Quarter Ending *','This Quarter Ending *','Upto This Quarter YTD *',
-Sometimes smame year but different months are give so in that case you will have to extract the latest quarter values.
-fiscal year starts at (Asar | Ashad) is q1
-(Asoj | Aswin) is q2
-(Poush) is q3
-(Chaitra) is q4
-Always prioritize q4 over q3 over q2 over q1
-`;
+Extract data from the provided image for the following categories, focusing *exclusively* on the **final quarter (Q4)** of the current fiscal year for **banks only**. The fiscal year starts in (Asar | Ashad) and ends in (Chaitra). Therefore, Q4 corresponds to the quarter ending in (Chaitra). Ignore any data related to other quarters (Q1, Q2, Q3), year-to-date (YTD) values, or *group data*.  Extract *only* bank-specific data.
+
+**Response Schema:**
+
+For each <sub_category> listed below, provide the corresponding <bank_current_year_quater> value. The <bank_current_year_quater> should represent the *final quarter ending in (Chaitra)*. If multiple quarters are present for the current year, select only the Q4 data. If the quarter ending in (Chaitra) is not available, assign a hyphen '-' to the corresponding <sub_category> value.
+
+**Data Identification:**
+
+*   If the data is presented in four columns, assume it represents bank data for the current year.
+*   If the data is presented in eight columns, assume the *last four* columns represent bank data for the current year.
+*   If both group data and bank data are present, extract *only* the bank data.
+
+**Specific Instructions:**
+
+*   Do not include any data from previous years or other quarters of the current year.
+*   Do not include any year-to-date (YTD) data.
+*   Do not include any *group data*.
+*   If a value appears as '-', treat it as an empty cell (no data), not as a negative value.
+*   Ratio data should be presented as a percentage (%).
+*   Pay close attention to potential synonyms for "final quarter," such as "Fourth Quarter Ending (Chaitra)," "Final Quarter Ending," or similar variations. The key is that it must be for the quarter ending in (Chaitra).`
 
 const quarterly_output_format: string = `
-FINALLY: Return data in JSON format as an array of JSON objects. Each individual data point (sub-category and its value) MUST be its own separate object within the array. The key of the object should be the sub-category name, and the value should be the corresponding data (as a string). Do NOT group related data points into the same object.
+**Output Format:**
+
+Return data in JSON format as an array of JSON objects. Each individual data point (sub-category and its value) MUST be its own separate object within the array. The key of the object should be the sub-category name (in snake_case), and the value should be the corresponding data (as a string). If you don't find value for that sub_category, you can assign a hyphen '-' to it. Do NOT group related data points into the same object. Ensure no duplicate keys/(sub_category) are sent.
 
 Examples:
 
 Input:
 Interest Income: 210,731,102
 Net Interest Income: 73,635,440
-
-Output:
-[
-  {"interest_income": "210,731,102"},
-  {"net_interest_income": "73,635,440"}
-]
-
-Input:
-Fee and Commission Income: 3,178,014
-Other Operating Expenses: (3,111,837)
-
-Output:
-[
-  {"fee_and_commission_income": "3,178,014"},
-  {"other_operating_expenses": "(3,111,837)"}
-]
-
-Input:
 Capital Fund to RWA: "9.65%"
 
-Output:[
-  {"capital_fund_to_rwa": "9.65%"}
+Output:
+[
+  {"interest_income": "210,731,102"},
+  {"net_interest_income": "73,635,440"},
+  {"capital_fund_to_rwa": "9.65%"}
 ]
-Now, apply this same pattern to the *entire* input data you are given.  Each key-value pair must be a separate object in the array.
-IMPORTANT and REMEMBER, You must return all sub_category, if you don't find value for that sub_category you can assign a hyphen '-' to it.
-MAKE SURE to not send duplicate keys/(</sub_category>)
 `;
 
 const bankingIncomeStatementLabels: string = `
