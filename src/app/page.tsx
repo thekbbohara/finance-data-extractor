@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import { Button, Select, Modal, Image as AntImage, message, Input, Switch } from "antd";
+import { Button, Select, Modal, Image as AntImage, message, Input, Switch, DatePicker } from "antd";
 import { useState } from "react";
 import Dropzone from "react-dropzone";
 import ReactCrop, { PixelCrop } from 'react-image-crop';
@@ -84,6 +84,8 @@ const ImageDropzone = () => {
   const [extractedData, setExtractedData] = useState<{ [key: string]: { [key: string]: string }[] } | null>(null);
   const [extractedChecks, setExtractedChecks] = useState<{ [key: string]: { [key: string]: string } } | null>(null);
   const [isInThousands, setIsInThousands] = useState(false);
+  const [fy, setFy] = useState<null | string>(null);
+  const [quarter, setQuarter] = useState<null | string>(null);
 
   const handleUpload = async (acceptedFiles: any) => {
     try {
@@ -385,13 +387,17 @@ const ImageDropzone = () => {
                       <tbody>
                         {data.map((item: { [key: string]: string }, id: number) =>
                           Object.entries(item).map(([key, val]: [string, string]) => (
-                            <tr key={id + key}>
+                            <tr key={id + key} className={cn(id % 2 == 0 ? "bg-white" : "bg-gray-100")}>
                               <td>{dataDict(key, selectedSector, otherSelectedSector) || key}</td>
-                              <td >
-                                <Input
+                              <td>
+                                <input
+                                  type="text"
                                   value={val}
                                   onChange={e => handleDataChange(label, id, key, e.target.value)}
-                                  className={cn(extractedChecks && extractedChecks[label] && extractedChecks[label][key] && extractedChecks[label][key] == "false" ? "border border-red-500 focus:border-red-500" : "", "w-full")}
+                                  className={cn(
+                                    "rounded-none bg-transparent border focus:border border-transparent px-2",
+                                    id % 2 == 0 ? "border-b-slate-300 focus:border-b-slate-500  hover:border-b-slate-500" : "border-b-black focus:border-b-black hover:border-b-slate-500 ",
+                                    extractedChecks && extractedChecks[label] && extractedChecks[label][key] && extractedChecks[label][key] == "false" ? "border border-b-red-500 focus:border-red-500" : "", "w-full")}
                                 />
                               </td>
                             </tr>
@@ -401,14 +407,37 @@ const ImageDropzone = () => {
                     </table>
                   </div>
                 ))}
-                <Button
-                  type="primary"
-                  onClick={handleSaveData}
-                  size="large"
-                  className="mt-6 bg-blue-500 hover:bg-blue-600"
-                >
-                  Save Data
-                </Button>
+                <div className='flex *:h-12 mt-6 justify-between '>
+                  <div className='flex *:h-12   gap-2'>
+                    <Select
+                      key={"quarter"}
+                      onChange={setQuarter}
+                      value={quarter || "quarter ?"}
+                      options={[
+                        { label: "quarter 1", value: "q1" },
+                        { label: "quarter 2", value: "q2" },
+                        { label: "quarter 3", value: "q3" },
+                        { label: "quarter 4", value: "q4" },
+                      ]}
+                    />
+                    <Input
+                      className='w-32'
+                      value={fy ?? ""}
+                      onChange={(e) => { setFy(e.target.value) }}
+                      type='text'
+                      placeholder='input fy'
+                    />
+                  </div>
+                  <Button
+                    disabled={!quarter || !fy}
+                    type="primary"
+                    onClick={handleSaveData}
+                    size="large"
+                    className="bg-blue-500 hover:bg-blue-600"
+                  >
+                    Save Data
+                  </Button>
+                </div>
               </div>
             )}
           </div>
