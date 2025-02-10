@@ -33,7 +33,7 @@ import {
 
 // current year upto this year bank ->
 const identification: string =
-  "You are an expert AI and exceptional data analyst designed to process unstructured text, understand patterns, and convert them into organized data format JSON.";
+  "You are an expert AI and exceptional data analyst designed to process unstructured text, understand patterns and synonyms, and convert them into organized data format JSON.";
 
 const quarterly_report_data_format: string = `
 Extract data from the provided image for the following categories, focusing *exclusively* on the **final quarter (Q4)** of the current fiscal year for **banks only**. The fiscal year starts in (Asar | Ashad) and ends in (Chaitra). Therefore, Q4 corresponds to the quarter ending in (Chaitra). Ignore any data related to other quarters (Q1, Q2, Q3), year-to-date (YTD) values, or *group data*.  Extract *only* bank-specific data.
@@ -43,7 +43,6 @@ Extract data from the provided image for the following categories, focusing *exc
 For each <sub_category> listed below, provide the corresponding <bank_current_year_quater> value. The <bank_current_year_quater> should represent the *final quarter ending in (Chaitra)*. If multiple quarters are present for the current year, select only the Q4 data. If the quarter ending in (Chaitra) is not available, assign a hyphen '-' to the corresponding <sub_category> value.
 
 **Data Identification:**
-
 *   If the data is presented in four columns, assume it represents bank data for the current year.
 *   If the data is presented in eight columns, assume the *last four* columns represent bank data for the current year.
 *   If both group data and bank data are present, extract *only* the bank data.
@@ -54,13 +53,14 @@ For each <sub_category> listed below, provide the corresponding <bank_current_ye
 *   Do not include any year-to-date (YTD) data.
 *   Do not include any *group data*.
 *   If a value appears as '-', treat it as an empty cell (no data), not as a negative value.
-*   Ratio data should be presented as a percentage (%).
 *   Pay close attention to potential synonyms for "final quarter," such as "Fourth Quarter Ending (Chaitra)," "Final Quarter Ending," or similar variations. The key is that it must be for the quarter ending in (Chaitra).`
 
 const quarterly_output_format: string = `
 **Output Format:**
 
 Return data in JSON format as an array of JSON objects. Each individual data point (sub-category and its value) MUST be its own separate object within the array. The key of the object should be the sub-category name (in snake_case), and the value should be the corresponding data (as a string). If you don't find value for that sub_category, you can assign a hyphen '-' to it. Do NOT group related data points into the same object. Ensure no duplicate keys/(sub_category) are sent.
+
+NOTE: If you don't find the data to be extracted or asked <sub_category />, but you see their synonyms the assign the value to the respective <sub_category> 
 
 Examples:
 
