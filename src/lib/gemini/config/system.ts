@@ -51,7 +51,6 @@ For each <sub_category> listed below, provide the corresponding <bank_current_ye
 **Specific Instructions:**
 
 *   Do not include any data from previous years or other quarters of the current year.
-*   Do not include any year-to-date (YTD) data.
 *   Do not include any *group data*.
 *   If a value appears as '-', treat it as an empty cell (no data), not as a negative value.
 *   Pay close attention to potential synonyms for "final quarter," such as "Fourth Quarter Ending (Chaitra)," "Final Quarter Ending," or similar variations. The key is that it must be for the quarter ending in (Chaitra).`
