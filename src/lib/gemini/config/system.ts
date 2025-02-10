@@ -30,6 +30,7 @@ import {
   nwclBalanceSheetSubCategories,
   nwclIncomeStatementSubCategories,
 } from ".";
+import { hydroBalanceSheetSynonymsDict, hydroIncomeStatementSynonymsDict } from "./dict";
 
 // current year upto this year bank ->
 const identification: string =
@@ -197,9 +198,12 @@ ${investment_extra_instruction}
 // hydro
 const hydro_extra_instruction = `
 Be mindfull of synonyms while extracting, it may be not labled as asked in <sub_category>*</sub_category> so first understand the synonyms and then assign it's value to respective <sub_category>
+
 `;
 const hydro_incomestatement_labels = `
 ${hydro_extra_instruction}
+Here are some common synonyms
+For incomestatement:${JSON.stringify(hydroIncomeStatementSynonymsDict)}
 <category>
   <sub_category>
     ${hydroIncomeStatementSubCategories.join("\n")}
@@ -208,7 +212,9 @@ ${hydro_extra_instruction}
 `;
 
 const hydro_balancesheet_labels = `
-${investment_extra_instruction}
+${hydro_extra_instruction}
+Here are some common synonyms
+For balancesheet:${JSON.stringify(hydroBalanceSheetSynonymsDict)}
 <category>
   <sub_category>
     ${hydroBalanceSheetSubCategories.join("\n")}
