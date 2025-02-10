@@ -41,6 +41,7 @@ const createSubCat = (dict: Dict): string[] => {
   const cat = Object.entries(dict).map((i) => {
     return i[0];
   });
+  //console.log(cat)
   return cat;
 };
 

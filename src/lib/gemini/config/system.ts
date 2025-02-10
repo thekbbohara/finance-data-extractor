@@ -49,7 +49,6 @@ For each <sub_category> listed below, provide the corresponding <bank_current_ye
 *   If both group data and bank data are present, extract *only* the bank data.
 
 **Specific Instructions:**
-
 *   Do not include any data from previous years or other quarters of the current year.
 *   Do not include any *group data*.
 *   If a value appears as '-', treat it as an empty cell (no data), not as a negative value.
@@ -68,17 +67,19 @@ Input:
 Interest Income: 210,731,102
 Net Interest Income: 73,635,440
 Capital Fund to RWA: "9.65%"
+Total Issued Policy Count: "71,202"
 
 Output:
 [
   {"interest_income": "210,731,102"},
   {"net_interest_income": "73,635,440"},
-  {"capital_fund_to_rwa": "9.65%"}
+  {"capital_fund_to_rwa": "9.65%"},
+  {total_issued_policy_count: "71,202"}
 ]
 `;
 
 const bankingIncomeStatementLabels: string = `
-NOTE: If 'This Quarter Ending' and 'Upto This Quarter (YTD)' is given prioritize Upto This Quarter (YTD) and return 'Upto This Quarter (YTD)' no need to return This Quarter Ending.
+NOTE: If 'This Quarter Ending' and 'Upto This Quarter (YTD)' is given prioritize Upto This Quarter (YTD) and return 'Upto This Quarter (YTD)' dont return This Quarter Ending.
 <category>
   profit_or_Loss
   <sub_category>
