@@ -94,6 +94,60 @@ export const bankRatiosDict: Dict = {
   return_on_equity_annualized: "Return on Equity (Annualized)",
   return_on_assets_annualized: "Return on Assets (Annualized)",
 };
+export const microFinanceIncomeStatementDict = {
+  interest_income: "Interest Income",
+  interest_expense: "Interest Expense",
+  net_interest_income: "Net Interest Income",
+  fee_and_commission_income: "Fee and Commission Income",
+  fee_and_commission_expense: "Fee and Commission Expense",
+  net_fee_and_commission_income: "Net Fee and Commission Income",
+  net_interest_fee_and_commission_income:
+    "Net Interest, Fee, and Commission Income",
+  net_trading_income: "Net Trading Income",
+  other_operating_income: "Other Operating Income",
+  total_operating_income: "Total Operating Income",
+  impairment_charge_reversal_for_loans_and_other_losses:
+    "Impairment Charge/Reversal for Loans and Other Losses",
+  personnel_expense: "Personnel Expense",
+  other_operating_expenses: "Other Operating Expenses",
+  depreciation_amortization: "Depreciation and Amortization",
+  operating_profit: "Operating Profit",
+  non_operating_income: "Non Operating Income",
+  non_operating_expense: "Non Operating Expense",
+  profit_before_income_tax: "Profit Before Income Tax",
+  current_tax: "Current Tax",
+  profit_loss_for_the_period: "Net Profit",
+};
+export const microFinanceBalanceSheetDict = {
+  cash_and_cash_equivalents: "Cash and Cash Equivalents",
+  due_from_nepal_rastra_bank: "Due from Nepal Rastra Bank",
+  placement_with_bank_and_financial_institutions:
+    "Placement with Bank and Financial Institutions",
+  assets_derivative_financial_instruments:
+    "Assets: Derivative Financial Instruments",
+  other_trading_assets: "Other Trading Assets",
+  loan_and_advances_to_bfs:
+    "Loan and Advances to Bank and Financial Institutions",
+  loan_and_advances_to_customers: "Loans and Advances to Customers",
+  investment_securities: "Investment Securities",
+  current_tax_asset: "Current Tax Asset",
+  property_and_equipment: "Property and Equipment",
+  goodwill_and_intangible_assets: "Goodwill and Intangible Assets",
+  other_assets: "Other Assets",
+  total_assets: "Total Assets",
+  due_to_bank_and_financial_institutions:
+    "Due to Bank and Financial Institutions",
+  deposit_from_customers: "Deposits from Customers",
+  borrowings: "Borrowings",
+  current_tax_liabilities: "Current Tax Liabilities",
+  other_liabilities: "Other Liabilities",
+  total_liabilities: "Total Liabilities",
+  share_capital: "Share Capital",
+  retained_earnings: "Retained Earnings",
+  reserves: "Reserves",
+  total_equity: "Total Equity",
+  total_liabilities_and_equity: "Total Liabilities and Equity",
+};
 export const insuranceBalanceSheetDict: Dict = {
   goodwill_intangible_assets: "Goodwill & Intangible Assets",
   property_and_equipment: "Property and Equipment",

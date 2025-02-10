@@ -390,7 +390,7 @@ const ImageDropzone = () => {
                                 <Input
                                   value={val}
                                   onChange={e => handleDataChange(label, id, key, e.target.value)}
-                                  className={cn(extractedChecks && extractedChecks[label][key] && extractedChecks[label][key] == "false" ? "border border-red-500 focus:border-red-500" : "", "w-full")}
+                                  className={cn(extractedChecks && extractedChecks[label] && extractedChecks[label][key] && extractedChecks[label][key] == "false" ? "border border-red-500 focus:border-red-500" : "", "w-full")}
                                 />
                               </td>
                             </tr>

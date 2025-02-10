@@ -20,6 +20,8 @@ import {
   investmentIncomeStatementDict,
   investmentRatiosDict,
   lifeInsuranceRatiosDict,
+  microFinanceBalanceSheetDict,
+  microFinanceIncomeStatementDict,
   mkchBalanceSheetDict,
   mkchIncomeStatementDict,
   mpBalanceSheetDict,
@@ -124,6 +126,10 @@ export const [hydroIncomeStatementSubCategories, hydroIncomeStatementConfig] =
 
 export const [hydroBalanceSheetSubCategories, hydroBalanceSheetConfig] =
   genConf(hydroBalanceSheetDict);
+
+export const [microFinanceIncomeStatementSubCategories, microFinanceIncomeStatementConfig] = genConf(microFinanceIncomeStatementDict)
+
+export const [microFinanceBalanceSheetSubCategories, microFinanceBalanceSheetConfig] = genConf(microFinanceBalanceSheetDict)
 
 // Others
 export const [htBalanceSheetSubCategories, htBalanceSheetConfig] =

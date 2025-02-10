@@ -14,6 +14,8 @@ import {
   investmentIncomeStatementSubCategories,
   investmentRatiosSubCategories,
   lifeInsuranceRatiosSubCategories,
+  microFinanceBalanceSheetSubCategories,
+  microFinanceIncomeStatementSubCategories,
   mkchBalanceSheetSubCategories,
   mkchIncomeStatementSubCategories,
   mpBalanceSheetSubCategories,
@@ -314,6 +316,21 @@ const mkch_balancesheet_labels = `
 </category>
 `;
 
+const micro_finance_incomestatement_labels = `
+<category>
+  <sub_category>
+    ${microFinanceIncomeStatementSubCategories.join("\n")}
+  </sub_category>
+</category>
+`
+
+const micro_finance_balancesheet_labels = `
+<category>
+  <sub_category>
+    ${microFinanceBalanceSheetSubCategories.join("\n")}
+  </sub_category>
+</category>
+`
 const quarterly_report_instruction = (labels: string) => {
   return `${identification} ${quarterly_report_data_format} ${labels} ${quarterly_output_format}`;
 };
@@ -365,6 +382,13 @@ export const HYDRO_BALANCESHEET_EXTRACTION_INSTRUCTION =
 
 export const HYDRO_INCOMESTATEMENT_EXTRACTION_INSTRUCTION =
   quarterly_report_instruction(hydro_incomestatement_labels);
+
+export const MICROFINANCE_BALANCESHEET_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(micro_finance_balancesheet_labels);
+
+export const MICROFINANCE_INCOMESTATEMENT_EXTRACTION_INSTRUCTION =
+  quarterly_report_instruction(micro_finance_incomestatement_labels);
+
 
 // others
 

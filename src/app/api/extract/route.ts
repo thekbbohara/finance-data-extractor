@@ -21,6 +21,8 @@ import {
   getMKCHIncomeStatementData,
   getMPBalanceSheetData,
   getMPIncomeStatementData,
+  getMicroFinanceBalanceSheetData,
+  getMicroFinanceIncomeStatementData,
   getNRICBalanceSheetData,
   getNRICIncomeStatementData,
   getNRMBalanceSheetData,
@@ -138,9 +140,11 @@ export async function POST(request: Request) {
       case "development_banks-incomeStatement":
       case "commercial_banks-incomeStatement":
       case "finance-incomeStatement":
-      case "micro_finance-incomeStatement":
         data = await getBankingIncomeStatement(filePath);
         checks = compareTotal(data, bankingIncomeStatementChecks);
+        break;
+      case "micro_finance-incomeStatement":
+        data = await getMicroFinanceIncomeStatementData(filePath);
         break;
       case "non_life_insurance-balanceSheet":
       case "life_insurance-balanceSheet":
@@ -172,9 +176,11 @@ export async function POST(request: Request) {
       case "development_banks-balanceSheet":
       case "commercial_banks-balanceSheet":
       case "finance-balanceSheet":
-      case "micro_finance-balanceSheet":
         data = await getBalanceSheetData(filePath);
         checks = compareTotal(data, bankingBalanceSheetChecks);
+        break;
+      case "micro_finance-balanceSheet":
+        data = await getMicroFinanceBalanceSheetData(filePath);
         break;
       case "development_banks-ratios":
       case "commercial_banks-ratios":
@@ -249,6 +255,7 @@ export async function POST(request: Request) {
         { status: 500 },
       );
     }
+    console.log(data)
     const uniqueData: Dict[] = Object.values(
       data.reduce(
         (acc: Record<string, Dict>, obj: Dict) => {

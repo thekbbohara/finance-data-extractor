@@ -16,6 +16,8 @@ import {
   investmentBalanceSheetConfig,
   investmentIncomeStatementConfig,
   investmentRatiosConfig,
+  microFinanceBalanceSheetConfig,
+  microFinanceIncomeStatementConfig,
   mkchBalanceSheetConfig,
   mkchIncomeStatementConfig,
   mpBalanceSheetConfig,
@@ -47,6 +49,8 @@ import {
   INVESTMENT_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
   INVESTMENT_RATIOS_EXTRACTION_INSTRUCTION,
   LIFE_INSURANCE_RATIOS_EXTRACTION_INSTRUCTION,
+  MICROFINANCE_BALANCESHEET_EXTRACTION_INSTRUCTION,
+  MICROFINANCE_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
   MKCH_BALANCESHEET_EXTRACTION_INSTRUCTION,
   MKCH_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
   MP_BALANCESHEET_EXTRACTION_INSTRUCTION,
@@ -225,6 +229,19 @@ export const getHydroBalanceSheetData = createExtractor(
   "Extract respective data from given image",
   hydroBalanceSheetConfig,
   "hydro_balancesheet_config",
+);
+// micro finance
+export const getMicroFinanceIncomeStatementData = createExtractor(
+  MICROFINANCE_INCOMESTATEMENT_EXTRACTION_INSTRUCTION,
+  "Extract respective data from given image",
+  microFinanceIncomeStatementConfig,
+  "microFinance_incomestatement_config",
+);
+export const getMicroFinanceBalanceSheetData = createExtractor(
+  MICROFINANCE_BALANCESHEET_EXTRACTION_INSTRUCTION,
+  "Extract respective data from given image",
+  microFinanceBalanceSheetConfig,
+  "microFinance_balancesheet_config",
 );
 // others
 export const getHRLIncomeStatementData = createExtractor(
