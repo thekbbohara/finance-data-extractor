@@ -60,7 +60,7 @@ const quarterly_output_format: string = `
 
 Return data in JSON format as an array of JSON objects. Each individual data point (sub-category and its value) MUST be its own separate object within the array. The key of the object should be the sub-category name (in snake_case), and the value should be the corresponding data (as a string). If you don't find value for that sub_category, you can assign a hyphen '-' to it. Do NOT group related data points into the same object. Ensure no duplicate keys/(sub_category) are sent.
 
-NOTE: If you don't find the data to be extracted or asked <sub_category />, but you see their synonyms the assign the value to the respective <sub_category> 
+NOTE: If you don't find the data to be extracted or asked <sub_category />, but you see their synonyms the assign the value to the respective <sub_category> and if you don't find any data for asked <sub_category> just assign "-" to it but you must return all <sub_category> asked.
 
 Examples:
 
