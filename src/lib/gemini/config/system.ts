@@ -34,32 +34,42 @@ import { hydroBalanceSheetSynonymsDict, hydroIncomeStatementSynonymsDict } from 
 
 // current year upto this year bank ->
 const identification: string =
-  "You are an expert AI and exceptional data analyst designed to process unstructured text, understand patterns and synonyms, and convert them into organized data format JSON.";
+  `You are an expert AI and exceptional data analyst designed to process unstructured text, understand patterns and synonyms, and convert them into organized data format JSON.
+First Look at userInstruction if user have Specific instructions mentioned or column mentioned extract that column, user might give you the name of the column or the index remember to count in index (particulars/labels) are in 0th index. Then next column is 1. No user will ask for you to extract particulars/labels.
+  `;
+
+
+//**Response Schema:**
+//Extract data from the provided image for the following categories, focusing *exclusively* on the **final quarter (Q4)** of the current fiscal year for **banks only**. The fiscal year starts in (Asar | Ashad) and ends in (Chaitra). Therefore, Q4 corresponds to the quarter ending in (Chaitra). Ignore any data related to other quarters (Q1, Q2, Q3), year-to-date (YTD) values, or *group data*.  Extract *only* bank-specific data.
+
+//For each <sub_category> listed below, provide the corresponding <bank_current_year_quater> value. The <bank_current_year_quater> should represent the *final quarter ending in (Chaitra)*. If multiple quarters are present for the current year, select only the Q4 data. If the quarter ending in (Chaitra) is not available, assign a hyphen '-' to the corresponding <sub_category> value.
+
+//**Data Identification:**
+//*   If the data is presented in four columns, assume it represents bank data for the current year.
+//*   If the data is presented in eight columns, assume the *last four* columns represent bank data for the current year.
+//*   If both group data and bank data are present, extract *only* the bank data.
+
+//**Specific Instructions:**
+//*   Do not include any data from previous years or other quarters of the current year.
+//*   Do not include any *group data*.
+//*   If a value appears as '-', treat it as an empty cell (no data), not as a negative value.
+//*   Pay close attention to potential synonyms for "final quarter," such as "Fourth Quarter Ending (Chaitra)," "Final Quarter Ending," or similar variations. The key is that it must be for the quarter ending in (Chaitra).`
+// ..
+
+//*   Pay close attention to potential synonyms for "final quarter," such as "Fourth Quarter Ending (Chaitra)," "Final Quarter Ending," or similar variations. The key is that it must be for the quarter ending in (Chaitra).
+
 
 const quarterly_report_data_format: string = `
-Extract data from the provided image for the following categories, focusing *exclusively* on the **final quarter (Q4)** of the current fiscal year for **banks only**. The fiscal year starts in (Asar | Ashad) and ends in (Chaitra). Therefore, Q4 corresponds to the quarter ending in (Chaitra). Ignore any data related to other quarters (Q1, Q2, Q3), year-to-date (YTD) values, or *group data*.  Extract *only* bank-specific data.
-
-**Response Schema:**
-
-For each <sub_category> listed below, provide the corresponding <bank_current_year_quater> value. The <bank_current_year_quater> should represent the *final quarter ending in (Chaitra)*. If multiple quarters are present for the current year, select only the Q4 data. If the quarter ending in (Chaitra) is not available, assign a hyphen '-' to the corresponding <sub_category> value.
-
-**Data Identification:**
-*   If the data is presented in four columns, assume it represents bank data for the current year.
-*   If the data is presented in eight columns, assume the *last four* columns represent bank data for the current year.
-*   If both group data and bank data are present, extract *only* the bank data.
-
 **Specific Instructions:**
-*   Do not include any data from previous years or other quarters of the current year.
-*   Do not include any *group data*.
 *   If a value appears as '-', treat it as an empty cell (no data), not as a negative value.
-*   Pay close attention to potential synonyms for "final quarter," such as "Fourth Quarter Ending (Chaitra)," "Final Quarter Ending," or similar variations. The key is that it must be for the quarter ending in (Chaitra).`
+
+NOTE: If you don't find the data to be extracted or asked <sub_category />, but you see their synonyms the assign the value to the respective <sub_category> and if you don't find any data for asked <sub_category> just assign "-" to it but you must return all <sub_category> asked.
+`
 
 const quarterly_output_format: string = `
 **Output Format:**
+Return data in JSON format as an array of JSON objects. Each individual data point (sub-category and its value) MUST be its own separate object within the array. The key of the object should be the sub-category name (in snake_case), and the value should be the corresponding data (as a string). If you don't find value for that sub_category, you can assign a hyphen '-' to it. Do NOT group related data points into the same object. Ensure no duplicate keys/(sub_category) are sent all around all {} in [].
 
-Return data in JSON format as an array of JSON objects. Each individual data point (sub-category and its value) MUST be its own separate object within the array. The key of the object should be the sub-category name (in snake_case), and the value should be the corresponding data (as a string). If you don't find value for that sub_category, you can assign a hyphen '-' to it. Do NOT group related data points into the same object. Ensure no duplicate keys/(sub_category) are sent.
-
-NOTE: If you don't find the data to be extracted or asked <sub_category />, but you see their synonyms the assign the value to the respective <sub_category> and if you don't find any data for asked <sub_category> just assign "-" to it but you must return all <sub_category> asked.
 
 Examples:
 
@@ -79,7 +89,6 @@ Output:
 `;
 
 const bankingIncomeStatementLabels: string = `
-NOTE: If 'This Quarter Ending' and 'Upto This Quarter (YTD)' is given prioritize Upto This Quarter (YTD) and return 'Upto This Quarter (YTD)' dont return This Quarter Ending.
 <category>
   profit_or_Loss
   <sub_category>
@@ -90,7 +99,6 @@ NOTE: If 'This Quarter Ending' and 'Upto This Quarter (YTD)' is given prioritize
 `;
 
 const bankin_balance_sheet_labels: string = `
-NOTE: sometime 'Placement with Bank and Financial Institutions' is 'Placement with Bank and FIs' so extract it as <placement_with_bank_and_financial_institutions> 
 <category>
   Condensed Consolidated Statement of Financial Position (Unaudited)
   <sub_category>
@@ -202,7 +210,7 @@ Be mindfull of synonyms while extracting, it may be not labled as asked in <sub_
 `;
 const hydro_incomestatement_labels = `
 ${hydro_extra_instruction}
-Here are some common synonyms
+Here are some common synonyms but not all
 For incomestatement:${JSON.stringify(hydroIncomeStatementSynonymsDict)}
 <category>
   <sub_category>
@@ -213,7 +221,7 @@ For incomestatement:${JSON.stringify(hydroIncomeStatementSynonymsDict)}
 
 const hydro_balancesheet_labels = `
 ${hydro_extra_instruction}
-Here are some common synonyms
+Here are some common synonyms but not all
 For balancesheet:${JSON.stringify(hydroBalanceSheetSynonymsDict)}
 <category>
   <sub_category>

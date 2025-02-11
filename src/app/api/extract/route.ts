@@ -86,7 +86,7 @@ import { Dict } from "@/lib/gemini/config/dict";
 
 export async function POST(request: Request) {
   try {
-    const { image, sector, label } = await request.json();
+    const { image, sector, label, userInstruction } = await request.json();
 
     if (!image || !label) {
       return NextResponse.json(
@@ -114,126 +114,126 @@ export async function POST(request: Request) {
 
     switch (`${sector}-${label}`) {
       case "hydro_power-incomeStatement":
-        data = await getHydroIncomeStatementData(filePath);
+        data = await getHydroIncomeStatementData(filePath, userInstruction);
         checks = compareTotal(data, hydroIncomeStatementChecks);
         break;
       case "hydro_power-balanceSheet":
-        data = await getHydroBalanceSheetData(filePath);
+        data = await getHydroBalanceSheetData(filePath, userInstruction);
         checks = compareTotal(data, hydroBalanceSheetChecks);
         break;
       case "hotels_and_tourism-incomeStatement":
-        data = await getHTIncomeStatementData(filePath);
+        data = await getHTIncomeStatementData(filePath, userInstruction);
         checks = compareTotal(data, htIncomeStatementChecks);
         break;
       case "hotels_and_tourism-balanceSheet":
-        data = await getHTBalanceSheetData(filePath);
+        data = await getHTBalanceSheetData(filePath, userInstruction);
         checks = compareTotal(data, htBalanceSheetChecks);
         break;
       case "manufacturing_and_processing-incomeStatement":
-        data = await getMPIncomeStatementData(filePath);
+        data = await getMPIncomeStatementData(filePath, userInstruction);
         checks = compareTotal(data, mpIncomeStatementChecks);
         break;
       case "manufacturing_and_processing-balanceSheet":
-        data = await getMPBalanceSheetData(filePath);
+        data = await getMPBalanceSheetData(filePath, userInstruction);
         checks = compareTotal(data, mpBalanceSheetChecks);
         break;
       case "development_banks-incomeStatement":
       case "commercial_banks-incomeStatement":
       case "finance-incomeStatement":
-        data = await getBankingIncomeStatement(filePath);
+        data = await getBankingIncomeStatement(filePath, userInstruction);
         checks = compareTotal(data, bankingIncomeStatementChecks);
         break;
       case "micro_finance-incomeStatement":
-        data = await getMicroFinanceIncomeStatementData(filePath);
+        data = await getMicroFinanceIncomeStatementData(filePath, userInstruction);
         break;
       case "non_life_insurance-balanceSheet":
       case "life_insurance-balanceSheet":
-        data = await getInsuranceBalanceSheetData(filePath);
+        data = await getInsuranceBalanceSheetData(filePath, userInstruction);
         checks = compareTotal(data, insuranceBalanceSheetChecks);
         break;
       case "non_life_insurance-incomeStatement":
       case "life_insurance-incomeStatement":
-        data = await getInsuranceIncomeStatementData(filePath);
+        data = await getInsuranceIncomeStatementData(filePath, userInstruction);
         checks = compareTotal(data, insuranceIncomeStatementChecks);
         break;
       case "non_life_insurance-ratios":
-        data = await getNonelifeInsuranceRatiosData(filePath);
+        data = await getNonelifeInsuranceRatiosData(filePath, userInstruction);
         break;
       case "life_insurance-ratios":
-        data = await getLifeInsuranceRatiosData(filePath);
+        data = await getLifeInsuranceRatiosData(filePath, userInstruction);
         break;
       case "investment-incomeStatement":
-        data = await getInvestmentIncomeStatementData(filePath);
+        data = await getInvestmentIncomeStatementData(filePath, userInstruction);
         checks = compareTotal(data, investmentIncomeStatementChecks);
         break;
       case "investment-balanceSheet":
-        data = await getInvestmentBalanceSheetData(filePath);
+        data = await getInvestmentBalanceSheetData(filePath, userInstruction);
         checks = compareTotal(data, investmentBalanceSheetChecks);
         break;
       case "investment-ratios":
-        data = await getInvestmentRatiosData(filePath);
+        data = await getInvestmentRatiosData(filePath, userInstruction);
         break;
       case "development_banks-balanceSheet":
       case "commercial_banks-balanceSheet":
       case "finance-balanceSheet":
-        data = await getBalanceSheetData(filePath);
+        data = await getBalanceSheetData(filePath, userInstruction);
         checks = compareTotal(data, bankingBalanceSheetChecks);
         break;
       case "micro_finance-balanceSheet":
-        data = await getMicroFinanceBalanceSheetData(filePath);
+        data = await getMicroFinanceBalanceSheetData(filePath, userInstruction);
         break;
       case "development_banks-ratios":
       case "commercial_banks-ratios":
       case "finance-ratios":
       case "micro_finance-ratios":
-        data = await getBankRatiosData(filePath);
+        data = await getBankRatiosData(filePath, userInstruction);
         break;
       case "others-hrl-incomeStatement":
-        data = await getHRLIncomeStatementData(filePath);
+        data = await getHRLIncomeStatementData(filePath, userInstruction);
         checks = compareTotal(data, hrlIncomeStatementChecks);
         break;
       case "others-hrl-balanceSheet":
-        data = await getHRLBalanceSheetData(filePath);
+        data = await getHRLBalanceSheetData(filePath, userInstruction);
         checks = compareTotal(data, hrlBalanceSheetChecks);
         break;
       case "others-ntc-incomeStatement":
-        data = await getNTCIncomeStatementData(filePath);
+        data = await getNTCIncomeStatementData(filePath, userInstruction);
         checks = compareTotal(data, ntcIncomeStatementChecks);
         break;
       case "others-ntc-balanceSheet":
-        data = await getNTCBalanceSheetData(filePath);
+        data = await getNTCBalanceSheetData(filePath, userInstruction);
         checks = compareTotal(data, ntcBalanceSheetChecks);
         break;
       case "others-nwcl-incomeStatement":
-        data = await getNWCLIncomeStatementData(filePath);
+        data = await getNWCLIncomeStatementData(filePath, userInstruction);
         checks = compareTotal(data, nwclIncomeStatementChecks);
         break;
       case "others-nwcl-balanceSheet":
-        data = await getNWCLBalanceSheetData(filePath);
+        data = await getNWCLBalanceSheetData(filePath, userInstruction);
         checks = compareTotal(data, nwclBalanceSheetChecks);
         break;
       case "others-nrm-incomeStatement":
-        data = await getNRMIncomeStatementData(filePath);
+        data = await getNRMIncomeStatementData(filePath, userInstruction);
         checks = compareTotal(data, nrmIncomeStatementChecks);
         break;
       case "others-nrm-balanceSheet":
-        data = await getNRMBalanceSheetData(filePath);
+        data = await getNRMBalanceSheetData(filePath, userInstruction);
         checks = compareTotal(data, nrmBalanceSheetChecks);
         break;
       case "others-nric-incomeStatement":
-        data = await getNRICIncomeStatementData(filePath);
+        data = await getNRICIncomeStatementData(filePath, userInstruction);
         checks = compareTotal(data, nricIncomeStatementChecks);
         break;
       case "others-nric-balanceSheet":
-        data = await getNRICBalanceSheetData(filePath);
+        data = await getNRICBalanceSheetData(filePath, userInstruction);
         checks = compareTotal(data, nricBalanceSheetChecks);
         break;
       case "others-mkch-incomeStatement":
-        data = await getMKCHIncomeStatementData(filePath);
+        data = await getMKCHIncomeStatementData(filePath, userInstruction);
         checks = compareTotal(data, mkchIncomeStatementChecks);
         break;
       case "others-mkch-balanceSheet":
-        data = await getMKCHBalanceSheetData(filePath);
+        data = await getMKCHBalanceSheetData(filePath, userInstruction);
         checks = compareTotal(data, mkchBalanceSheetChecks);
         break;
       default:

@@ -79,7 +79,7 @@ export const createExtractor = (
   generationConfig: GenerationConfig,
   name: string,
 ) => {
-  return async (imageUrl: string) => {
+  return async (imageUrl: string, userInstruction: string) => {
     //console.log(imageUrl ? "got img url" : "no img url");
     //console.log("Uploading img");
     const uploadResult = await fileManager.uploadFile(imageUrl, {
@@ -100,7 +100,7 @@ export const createExtractor = (
       //console.log("try", retry);
       try {
         const result = await model.generateContent([
-          prompt,
+          `${prompt} userInstruction:${userInstruction}`,
           {
             fileData: {
               fileUri: uploadResult.file.uri,

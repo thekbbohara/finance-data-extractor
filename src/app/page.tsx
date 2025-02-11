@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import { Button, Select, Modal, Image as AntImage, message, Input, Switch, DatePicker } from "antd";
+import { Button, Select, Modal, Image as AntImage, message, Input, Switch } from "antd";
 import { useState } from "react";
 import Dropzone from "react-dropzone";
 import ReactCrop, { PixelCrop } from 'react-image-crop';
@@ -86,6 +86,7 @@ const ImageDropzone = () => {
   const [isInThousands, setIsInThousands] = useState(false);
   const [fy, setFy] = useState<null | string>(null);
   const [quarter, setQuarter] = useState<null | string>(null);
+  const [userInstructionInput, setUserInstructionInput] = useState<string>("")
 
   const handleUpload = async (acceptedFiles: any) => {
     try {
@@ -196,6 +197,7 @@ const ImageDropzone = () => {
   };
 
   const handleExtract = async () => {
+    if (userInstructionInput.trim() === "") return;
     try {
       setLoading(true);
       const results: { [key: string]: { [key: string]: string }[] } = {};
@@ -209,7 +211,8 @@ const ImageDropzone = () => {
           body: JSON.stringify({
             image: area.croppedImage,
             label: area.label,
-            sector: area.sector
+            sector: area.sector,
+            userInstruction: userInstructionInput
           })
         });
 
@@ -442,23 +445,28 @@ const ImageDropzone = () => {
             )}
           </div>
         )}
+        <div className='flex gap-2'>
+          <Input value={userInstructionInput} onChange={(e) => { setUserInstructionInput(e.currentTarget.value) }} placeholder='Your instructions.' type='text' className='flex w-full'
+            disabled={!file || croppedAreas.length === 0 || loading}
+          />
+          <Button
+            type="primary"
+            onClick={handleExtract}
+            size="large"
+            loading={loading}
+            className={cn(
+              "submit-button px-8 py-4 rounded-xl text-white font-bold border transition-all duration-300",
+              file && croppedAreas.length > 0
+                ? "bg-[#4CAF50] hover:bg-[#45A049] border-[#4CAF50]"
+                : "cursor-not-allowed bg-gray-500 hover:bg-gray-500 border-gray-500"
+            )}
+            disabled={!file || croppedAreas.length === 0 || loading}
+          >
+            {loading ? 'Extracting...' : 'Extract Data'}
+          </Button>
 
-        <Button
-          type="primary"
-          onClick={handleExtract}
-          size="large"
-          loading={loading}
-          className={cn(
-            "submit-button px-8 py-4 rounded-xl text-white font-bold border transition-all duration-300",
-            file && croppedAreas.length > 0
-              ? "bg-[#4CAF50] hover:bg-[#45A049] border-[#4CAF50]"
-              : "cursor-not-allowed bg-gray-500 hover:bg-gray-500 border-gray-500"
-          )}
-          disabled={!file || croppedAreas.length === 0 || loading}
-        >
-          {loading ? 'Extracting...' : 'Extract Data'}
-        </Button>
 
+        </div>
         <Modal
           open={isSelectionModalVisible}
           onCancel={() => setIsSelectionModalVisible(false)}
