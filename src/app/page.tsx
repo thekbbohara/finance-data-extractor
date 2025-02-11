@@ -229,11 +229,15 @@ const ImageDropzone = () => {
       const _results: { [key: string]: { [key: string]: string }[] } = {}
       Object.entries(results).forEach((data: [string, any]) => {
         const [key, values] = data
-        if (key === "ratio") return _results[key] = values
+
         _results[key] = []
         values.forEach((items: { [key: string]: string }) => {
           const [p, d] = Object.entries(items)[0]
-          _results[key].push({ [p]: convertToThousands(d) })
+          if (key === "ratios" && p.includes("count")) {
+            _results[key].push({ [p]: d })
+          } else {
+            _results[key].push({ [p]: convertToThousands(d) })
+          }
         })
       })
       setExtractedData(_results)
