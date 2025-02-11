@@ -23,10 +23,11 @@ export const convertToThousands = (formattedString: string): string => {
   const numericValue = parseFloat(valueToConvert.replace(/,/g, ""));
   if (isNaN(numericValue)) return formattedString;
 
-  // Divide by 1000 if the number is greater than 10,000
-  const convertedValue =
-    numericValue > 10000 ? numericValue / 1000 : numericValue;
-
+  //const convertedValue =
+  //  numericValue > 10000 ? numericValue / 1000 : numericValue;
+  //
+  const convertedValue = numericValue / 1000;
+  //
   // Format with commas and two decimal places
   const result = convertedValue.toLocaleString("en-US", {
     minimumFractionDigits: 2,
