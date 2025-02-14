@@ -1,0 +1,91 @@
+   <div className='flex *:h-12 mt-6 justify-between '>
+              <div className='flex *:h-12   gap-2'>
+                <Select
+                  key={"quarter"}
+                  onChange={setQuarter}
+                  value={quarter || "quarter ?"}
+                  options={[
+                    { label: "quarter 1", value: "q1" },
+                    { label: "quarter 2", value: "q2" },
+                    { label: "quarter 3", value: "q3" },
+                    { label: "quarter 4", value: "q4" },
+                  ]}
+                />
+                <Input
+                  className='w-32'
+                  value={fy ?? ""}
+                  onChange={(e) => { setFy(e.target.value) }}
+                  type='text'
+                  placeholder='input fy'
+                />
+              </div>
+              <Button
+                disabled={!quarter || !fy}
+                type="primary"
+                onClick={handleSaveData}
+                size="large"
+                className="bg-blue-500 hover:bg-blue-600"
+              >
+                Save Data
+              </Button>
+            </div>
+
+//
+  const handleExtract = async () => {
+    try {
+      setLoading(true);
+      const results: { [key: string]: { [key: string]: string }[] } = {};
+      const checks: { [key: string]: { [key: string]: string } } = {};
+      for (const area of croppedAreas) {
+        const response = await fetch('/api/extract', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            image: area.croppedImage,
+            label: area.label,
+            sector: area.sector,
+            userInstruction: userInstructionInput
+          })
+        });
+
+        const result = await response.json();
+        if (result.data) {
+          results[area.label] = result.data;
+          checks[area.label] = result.checks ?? {};
+        }
+      }
+      if (isInThousands) {
+        setExtractedData(results);
+        return results;
+      }
+      const _results: { [key: string]: { [key: string]: string }[] } = {}
+      Object.entries(results).forEach((data: [string, any]) => {
+        const [key, values] = data
+
+        _results[key] = []
+        values.forEach((items: { [key: string]: string }) => {
+          const [p, d] = Object.entries(items)[0]
+          if (key === "ratios" && p.includes("count")) {
+            _results[key].push({ [p]: d })
+          } else {
+            _results[key].push({ [p]: convertToThousands(d) })
+          }
+        })
+      })
+      setExtractedData(_results)
+      setExtractedChecks(checks)
+      return _results;
+
+
+    } catch (error) {
+      console.error("Error extracting data:", error);
+      message.error("Failed to extract data from images");
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+

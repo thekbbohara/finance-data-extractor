@@ -1,9 +1,3 @@
-export interface GeminiTool {
-  name: string;
-  description: string;
-  run: (args: { input: string }) => string;
-}
-
 // convertToThousands
 export const convertToThousands = (formattedString: string): string => {
   if (formattedString === "-") return formattedString;
@@ -39,7 +33,7 @@ export const convertToThousands = (formattedString: string): string => {
 
 // check total
 
-const parseFormattedNumber = (value: string): number => {
+export const parseFormattedNumber = (value: string): number => {
   if (value === "-") return 0;
 
   // If the value is wrapped in parentheses, treat it as negative.
@@ -47,7 +41,6 @@ const parseFormattedNumber = (value: string): number => {
   if (String(value).startsWith("(") && String(value).endsWith(")")) {
     cleanedValue = `-${value.slice(1, -1)}`;
   }
-
   // Remove any commas and parse the float.
   return parseFloat(String(cleanedValue).replace(/,/g, ""));
 };
@@ -82,25 +75,5 @@ export const compareTotal = (
   return res;
 };
 
-// Create a tool object that wraps the conversion function
-export const convertToThousandsTool: GeminiTool = {
-  name: "ConvertToThousands",
-  description:
-    "Converts a formatted numeric string into thousands if its numeric value exceeds 10,000. Accepts inputs like '69000','15,000', '(25,000)', '-' and strings ending with '%'.",
-  run: ({ input }) => convertToThousands(input),
-};
 
-export const checkTotalTool: GeminiTool = {
-  name: "CheckTotal",
-  description:
-    "Checks whether the sum of an array of formatted numeric strings equals the provided total. " +
-    "Accepts input as a JSON string with keys 'values' (string array) and 'total' (string).",
-  run: ({ input }) => {
-    try {
-      const parsed = JSON.parse(input) as { values: string[]; total: string };
-      return checkTotal(parsed.values, parsed.total);
-    } catch {
-      return "false";
-    }
-  },
-};
+

@@ -15,9 +15,6 @@ export const bankingIncomeStatementDict: Dict = {
   total_operating_income: "Total Operating Income",
   impairment_charge_reversal_for_loans_and_other_losses:
     "Impairment Charge/Reversal for Loans and Other Losses",
-  interest_expenses: "Interest Expenses",
-  fees_and_commission_income: "Fees and Commission Incomes",
-  fees_and_commission_expenses: "Fees and Commission Expenses",
   net_operating_income: "Net Operating Income",
   personnel_expense: "Personnel Expenses",
   other_operating_expenses: "Other Operating Expenses",
