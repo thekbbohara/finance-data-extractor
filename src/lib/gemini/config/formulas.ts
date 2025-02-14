@@ -441,7 +441,7 @@ export const hydropowerRatiosFormulas: Formula[] = [
 
 // dicts
 
-export const bankingformulaDict = {
+const bankingformulaDict = {
   earning_per_share: "Earning per share",
   book_value_per_share: "Book value per share",
   net_interest_margin: "Net interest margin",
@@ -451,10 +451,19 @@ export const bankingformulaDict = {
   market_cap: "Market cap",
   price_to_loans: "Price to loans",
   price_to_earnings_ratio: "Price to earnings ratio",
-  price_to_book_value_ratio: "Price to book value ratio"
+  price_to_book_value_ratio: "Price to book value ratio",
+
+
+}
+const insuranceformulaDict = {
+  return_on_investment: "Return on investments",
+  loss_ratio: "Loss ratio",
+  management_ratio: "Management ratio",
+  commission_ratio: "Commission ratio",
+  combined_ratio: "Combined ratio",
 }
 
 
 export const formulaDict = (key: string) => {
-  return { ...bankingformulaDict }[key] ?? key
+  return { ...bankingformulaDict, ...insuranceformulaDict }[key] ?? key
 }

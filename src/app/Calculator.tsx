@@ -1,6 +1,6 @@
 "use client"
 import { ExtractedData } from "@/lib/consts/fde"
-import { bankingRatiosFormulas, FinancialData, formulaDict } from "@/lib/gemini/config/formulas";
+import { bankingRatiosFormulas, FinancialData, Formula, formulaDict, insuranceRatiosFormulas } from "@/lib/gemini/config/formulas";
 import { cn } from "@/utils/cn";
 import { Button, Input, Select } from "antd"
 import { useState } from "react";
@@ -23,25 +23,30 @@ export const Calculator = ({ data,
     console.log({ quarter_end_price })
     if (!data.balanceSheet || !data.incomeStatement) return null;
     const result: FinancialData = {};
+    const fd: FinancialData = reducedData()
+    fd.quarter_end_price = quarter_end_price || "-"
+    const calc = (formulas: Formula[]) => {
+      formulas.forEach((i) => {
+        const [key, fn] = Object.entries(i)[0]
+        const calVal = fn(fd, quarter, "hello")
+        fd[key] = calVal ?? "-";
+        result[key] = calVal ?? "-"
+      })
+    }
     switch (selectedSector) {
       case "commercial_banks":
       case "development_banks":
       case "finance":
       case "micro_finance":
-        const fd: FinancialData = reducedData()
-        fd.quarter_end_price = quarter_end_price || "-"
-        bankingRatiosFormulas.forEach((i) => {
-          const [key, fn] = Object.entries(i)[0]
-          const calVal = fn(fd, quarter, "hello")
-          fd[key] = calVal ?? "-";
-          result[key] = calVal ?? "-"
-        })
-        setCalculatedRatios(result)
+        calc(bankingRatiosFormulas)
         break;
+      case "life_insurance":
+      case "non_life_insurance":
+        calc(insuranceRatiosFormulas)
       default:
         break;
     }
-    console.log(result)
+    setCalculatedRatios(result)
   }
   return <div className="flex flex-col gap-4">
     <div className="flex flex-wrap gap-2 w-full">
