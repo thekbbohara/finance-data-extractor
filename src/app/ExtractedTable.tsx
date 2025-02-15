@@ -1,11 +1,12 @@
 "use client"
 import Tabs from "@/components/common/Tabs";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { cn } from "@/utils/cn";
 import { dataDict } from "@/lib/gemini/config/dict";
 import { allOptions, ExtractedChecks, ExtractedData } from "@/lib/consts/fde";
-import { Input, Select } from "antd";
 import { Calculator } from "./Calculator";
+import { InputRef } from "antd";
+import { FinancialData } from "@/lib/gemini/config/formulas";
 
 export const ExtractedTable = ({
   data,
@@ -25,10 +26,25 @@ export const ExtractedTable = ({
     return acc
   }, [])
   const [activeTab, setActiveTab] = useState(extractedTabs[0])
+  const [quarter, setQuarter] = useState<1 | 2 | 3 | 4>(1);
+  const companyInputRef = useRef<InputRef>(null)
+  const [quarterEndPrice, setQuarterEndPrice] = useState("");
+  const [calculatedRatios, setCalculatedRatios] = useState<FinancialData | null>(null)
+
   if (!selectedSector) return;
   return <div>
     <Tabs tabs={[...extractedTabs, "Calculator"]} activeTab={activeTab} setActiveTab={setActiveTab} />
-    {activeTab == "Calculator" && <Calculator selectedSector={selectedSector} data={data} />}
+    {activeTab == "Calculator" && <Calculator
+      selectedSector={selectedSector}
+      data={data}
+      quarter={quarter}
+      setQuarter={setQuarter}
+      quarterEndPrice={quarterEndPrice}
+      setQuarterEndPrice={setQuarterEndPrice}
+      calculatedRatios={calculatedRatios}
+      setCalculatedRatios={setCalculatedRatios}
+      companyInputRef={companyInputRef}
+    />}
     {data[activeTab] && <table border={1} cellPadding="8" style={{ width: "100%", borderCollapse: "collapse" }}>
       <thead>
         <tr>

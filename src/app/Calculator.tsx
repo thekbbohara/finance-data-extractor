@@ -2,15 +2,31 @@
 import { ExtractedData } from "@/lib/consts/fde"
 import { bankingRatiosFormulas, FinancialData, Formula, formulaDict, insuranceRatiosFormulas } from "@/lib/gemini/config/formulas";
 import { cn } from "@/utils/cn";
-import { Button, Input, Select } from "antd"
-import { useState } from "react";
+import { Button, Input, InputRef, Select } from "antd"
+import { Dispatch, RefObject, SetStateAction } from "react";
 
-export const Calculator = ({ data,
+export const Calculator = ({
+  data,
   selectedSector,
-}: { data: ExtractedData; selectedSector: string; }) => {
-  const [quarter, setQuarter] = useState<1 | 2 | 3 | 4>(1);
-  const [quarterEndPrice, setQuarterEndPrice] = useState("");
-  const [calculatedRatios, setCalculatedRatios] = useState<FinancialData | null>(null)
+  quarter,
+  setQuarter,
+  companyInputRef,
+  quarterEndPrice,
+  setQuarterEndPrice,
+  calculatedRatios,
+  setCalculatedRatios
+}: {
+  data: ExtractedData;
+  selectedSector: string;
+  quarter: 1 | 2 | 3 | 4;
+  setQuarter: Dispatch<SetStateAction<1 | 2 | 3 | 4>>;
+  companyInputRef: RefObject<InputRef | null>;
+  quarterEndPrice: string;
+  setQuarterEndPrice: Dispatch<SetStateAction<string>>;
+  calculatedRatios: FinancialData | null;
+  setCalculatedRatios: Dispatch<SetStateAction<FinancialData | null>>;
+
+}) => {
   const reducedData = (): FinancialData => {
     const rd = [...data.incomeStatement, ...data.balanceSheet].reduce((acc, curr) => {
       const [k, v] = Object.entries(curr)[0];
@@ -20,15 +36,15 @@ export const Calculator = ({ data,
     return rd;
   }
   const calculateRatios = (quarter: 1 | 2 | 3 | 4, quarter_end_price: string) => {
-    console.log({ quarter_end_price })
     if (!data.balanceSheet || !data.incomeStatement) return null;
+    const company = companyInputRef.current !== null ? companyInputRef.current.input?.value : ""
     const result: FinancialData = {};
     const fd: FinancialData = reducedData()
     fd.quarter_end_price = quarter_end_price || "-"
     const calc = (formulas: Formula[]) => {
       formulas.forEach((i) => {
         const [key, fn] = Object.entries(i)[0]
-        const calVal = fn(fd, quarter, "hello")
+        const calVal = fn(fd, quarter, company)
         fd[key] = calVal ?? "-";
         result[key] = calVal ?? "-"
       })
@@ -50,7 +66,7 @@ export const Calculator = ({ data,
   }
   return <div className="flex flex-col gap-4">
     <div className="flex flex-wrap gap-2 w-full">
-      <div className="w-fit flex items-center">
+      <div className=" flex items-center">
         <span>Quarter :</span>
         <Select
           onSelect={setQuarter}
@@ -65,6 +81,10 @@ export const Calculator = ({ data,
       <div className="w-fit flex items-center ">
         <span className="">Quarter end price :</span>
         <Input className="w-fit" value={quarterEndPrice} onChange={(e) => setQuarterEndPrice(e.currentTarget.value)} type="text" />
+      </div>
+      <div className="w-fit flex items-center ">
+        <span className="">Company: </span>
+        <Input className="w-fit" placeholder="Optional" ref={companyInputRef} type="text" />
       </div>
       <Button className="w-fit ml-auto" onClick={() => { calculateRatios(quarter, quarterEndPrice) }} >Calculate Ratios</Button>
     </div>
