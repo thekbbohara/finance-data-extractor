@@ -9,10 +9,13 @@ export interface Formula {
   [key: string]: (data: FinancialData, quater: 1 | 2 | 3 | 4, company?: string) => string | null;
 }
 
-const toLocaleStr = (val: number) => val.toLocaleString("en-US", {
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-})
+const toLocaleStr = (val: number) => {
+  if (val == Infinity) return null
+  return val.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })
+}
 
 export const bankingRatiosFormulas: Formula[] = [
   {
@@ -21,10 +24,6 @@ export const bankingRatiosFormulas: Formula[] = [
       const share_capital = parseFormattedNumber(data["share_capital"]);
       const divisor = company === "SHL" ? 10 : company === "HATHY" ? 50 : 100;
 
-      if (net_profit === 0 || share_capital === 0 || quarter === undefined) {
-        console.error("Missing or invalid data for earning_per_share calculation.");
-        return null;
-      }
       const value = (net_profit / (share_capital / divisor) / quarter) * 4
       return toLocaleStr(value);
     },
@@ -35,10 +34,6 @@ export const bankingRatiosFormulas: Formula[] = [
       const share_capital = parseFormattedNumber(data["share_capital"]);
       const divisor = data["company"] === "SHL" ? 10 : data["company"] === "HATHY" ? 50 : 100;
 
-      if (total_equity === 0 || share_capital === 0) {
-        console.error("Missing or invalid data for book_value_per_share calculation.");
-        return null;
-      }
       const value = total_equity / (share_capital / divisor)
       return toLocaleStr(value);
     },
@@ -49,12 +44,9 @@ export const bankingRatiosFormulas: Formula[] = [
       const loans_and_advances_to_customers = parseFormattedNumber(data["loan_and_advances_to_customers"]);
       const loans_and_advances_to_bfs = parseFormattedNumber(data["loan_and_advances_to_bfs"]);
 
-      if (net_interest_income === 0 || loans_and_advances_to_customers === 0 || loans_and_advances_to_bfs === 0 || quarter === undefined) {
-        console.error("Missing or invalid data for net_interest_margin calculation.");
-        return null;
-      }
-      const value = (net_interest_income / (loans_and_advances_to_customers + loans_and_advances_to_bfs)) * (4 / quarter);
-      return toLocaleStr(value);
+
+      const value = ((net_interest_income / (loans_and_advances_to_customers + loans_and_advances_to_bfs)) * (4 / quarter)) * 100;
+      return `${toLocaleStr(value)}%`;
     },
   },
   {
@@ -62,27 +54,17 @@ export const bankingRatiosFormulas: Formula[] = [
       const net_profit = parseFormattedNumber(data["profit_loss_for_the_period"]);
       const total_assets = parseFormattedNumber(data["total_assets"]);
 
-      if (net_profit === 0 || total_assets === 0 || quarter === undefined) {
-        console.error("Missing or invalid data for return_on_assets calculation.");
-        return null;
-      }
-
-      const value = (net_profit / total_assets) * (4 / quarter);
-      return toLocaleStr(value);
+      const value = ((net_profit / total_assets) * (4 / quarter)) * 100;
+      return `${toLocaleStr(value)}%`;
     },
   },
   {
-    return_on_equity: (data, quarter) => {
+    return_on_equity: (data) => {
       const earnings_per_share = parseFormattedNumber(data["earning_per_share"]);
       const book_value_per_share = parseFormattedNumber(data["book_value_per_share"]);
 
-      if (earnings_per_share === 0 || book_value_per_share === 0 || quarter === undefined) {
-        console.error("Missing or invalid data for return_on_equity calculation.");
-        return null;
-      }
-
-      const value = (earnings_per_share / book_value_per_share) * (4 / quarter);
-      return toLocaleStr(value);
+      const value = ((earnings_per_share / book_value_per_share)) * 100;
+      return `${toLocaleStr(value)}%`;
     },
   },
   {
@@ -91,16 +73,11 @@ export const bankingRatiosFormulas: Formula[] = [
       const personnel_expenses = parseFormattedNumber(data["personnel_expense"]);
       const other_operating_expenses = parseFormattedNumber(data["other_operating_expenses"]);
       const depreciation_amortization = parseFormattedNumber(data["depreciation_amortization"]);
-      const interest_income = parseFormattedNumber(data["interest_income"]);
+      const net_interest_income = parseFormattedNumber(data["net_interest_income"]);
       const fee_and_commission_income = parseFormattedNumber(data["fee_and_commission_income"]);
 
-      if (impairment_charges === 0 || personnel_expenses === 0 || other_operating_expenses === 0 || depreciation_amortization === 0 || interest_income === 0 || fee_and_commission_income === 0) {
-        console.error("Missing or invalid data for efficiency_ratio calculation.");
-        return null;
-      }
-
-      const value = (impairment_charges + personnel_expenses + other_operating_expenses + depreciation_amortization) / (interest_income + fee_and_commission_income);
-      return toLocaleStr(value);
+      const value = ((impairment_charges + personnel_expenses + other_operating_expenses + depreciation_amortization) / (net_interest_income + fee_and_commission_income)) * 100;
+      return `${toLocaleStr(value)}%`;
     },
   },
   {
@@ -109,28 +86,18 @@ export const bankingRatiosFormulas: Formula[] = [
       const share_capital = parseFormattedNumber(data["share_capital"]);
       const divisor = data["company"] === "SHL" ? 10 : data["company"] === "HATHY" ? 50 : 100;
 
-      if (quarter_end_price === 0 || share_capital === 0) {
-        console.error("Missing or invalid data for market_cap calculation.");
-        return null;
-      }
-
       const value = quarter_end_price * (share_capital / divisor);
-      console.log({ quarter_end_price, share_capital, divisor })
       return toLocaleStr(value);
     },
   },
   {
     price_to_loans: (data) => {
-      const quarter_end_price = parseFormattedNumber(data["quarter_end_price"]);
+      //const quarter_end_price = parseFormattedNumber(data["quarter_end_price"]);
+      const market_cap = parseFormattedNumber(data["market_cap"]);
       const loans_and_advances_to_customers = parseFormattedNumber(data["loan_and_advances_to_customers"]);
-      const loans_and_advances_to_bfs = parseFormattedNumber(data["loan_and_advances_to_bfs"]);
+      //const loans_and_advances_to_bfs = parseFormattedNumber(data["loan_and_advances_to_bfs"]);
 
-      if (quarter_end_price === 0 || loans_and_advances_to_customers === 0 || loans_and_advances_to_bfs === 0) {
-        console.error("Missing or invalid data for price_to_loans calculation.");
-        return null;
-      }
-
-      const value = quarter_end_price / (loans_and_advances_to_customers + loans_and_advances_to_bfs) / 100;
+      const value = (market_cap / loans_and_advances_to_customers);
       return toLocaleStr(value);
     },
   },
@@ -139,10 +106,6 @@ export const bankingRatiosFormulas: Formula[] = [
       const quarter_end_price = parseFormattedNumber(data["quarter_end_price"]);
       const earnings_per_share = parseFormattedNumber(data["earning_per_share"]);
 
-      if (quarter_end_price === 0 || earnings_per_share === 0) {
-        console.error("Missing or invalid data for price_to_earnings_ratio calculation.");
-        return null;
-      }
 
       const value = quarter_end_price / earnings_per_share;
       return toLocaleStr(value);
@@ -153,10 +116,6 @@ export const bankingRatiosFormulas: Formula[] = [
       const quarter_end_price = parseFormattedNumber(data["quarter_end_price"]);
       const book_value_per_share = parseFormattedNumber(data["book_value_per_share"]);
 
-      if (quarter_end_price === 0 || book_value_per_share === 0) {
-        console.error("Missing or invalid data for price_to_book_value_ratio calculation.");
-        return null;
-      }
       const value = quarter_end_price / book_value_per_share;
       return toLocaleStr(value);
     },
@@ -169,11 +128,6 @@ export const insuranceRatiosFormulas: Formula[] = [
       const net_profit = parseFormattedNumber(data["net_profit_loss_for_the_year"]);
       const share_capital = parseFormattedNumber(data["share_capital"]);
 
-      if (net_profit === 0 || share_capital === 0 || quarter === undefined) {
-        console.error("Missing or invalid data for earning_per_share calculation.");
-        return null;
-      }
-
       const value = (net_profit / (share_capital / 100) / quarter) * 4;
       return toLocaleStr(value);
     },
@@ -182,11 +136,6 @@ export const insuranceRatiosFormulas: Formula[] = [
     book_value_per_share: (data) => {
       const total_equity = parseFormattedNumber(data["total_equity"]);
       const share_capital = parseFormattedNumber(data["share_capital"]);
-
-      if (total_equity === 0 || share_capital === 0) {
-        console.error("Missing or invalid data for book_value_per_share calculation.");
-        return null;
-      }
 
       const value = total_equity / (share_capital / 100);
       return toLocaleStr(value);; // Return the raw numeric value
@@ -198,43 +147,30 @@ export const insuranceRatiosFormulas: Formula[] = [
       const investments = parseFormattedNumber(data["investments"]);
       const loans = parseFormattedNumber(data["loans"]);
 
-      if (income_from_investments_and_loans === 0 || investments === 0 || loans === 0 || quarter === undefined) {
-        console.error("Missing or invalid data for return_on_investment calculation.");
-        return null;
-      }
-
-      const value = (income_from_investments_and_loans / (investments + loans)) * (4 / quarter);
-      return toLocaleStr(value);; // Return the raw numeric value
+      const value = (income_from_investments_and_loans / (investments + loans)) * (4 / quarter) * 100;
+      return `${toLocaleStr(value)}%`; // Return the raw numeric value
     },
   },
   {
     loss_ratio: (data) => {
       const gross_benefits_and_claims_paid = parseFormattedNumber(data["gross_claims_paid"]);
-      const claims_ceded = parseFormattedNumber(data["claims_ceded"]);
+      let claims_ceded = parseFormattedNumber(data["claims_ceded"]);
+      claims_ceded = claims_ceded < 0 ? claims_ceded * -1 : claims_ceded;
       const net_earned_premiums = parseFormattedNumber(data["net_earned_premiums"]);
 
-      if (gross_benefits_and_claims_paid === 0 || claims_ceded === 0 || net_earned_premiums === 0) {
-        console.error("Missing or invalid data for loss_ratio calculation.");
-        return null;
-      }
-
-      const value = (gross_benefits_and_claims_paid - claims_ceded) / net_earned_premiums;
-      return toLocaleStr(value);; // Return the raw numeric value
+      const value = ((gross_benefits_and_claims_paid - claims_ceded) / net_earned_premiums) * 100;
+      return `${toLocaleStr(value)}%`; // Return the raw numeric value
     },
   },
   {
     management_ratio: (data) => {
       const employee_benefits_expenses = parseFormattedNumber(data["employee_benefits_expenses"]);
       const other_operating_expenses = parseFormattedNumber(data["other_operating_expenses"]);
+      const other_direct_expenses = parseFormattedNumber(data["other_direct_expenses"]);
       const net_earned_premiums = parseFormattedNumber(data["net_earned_premiums"]);
 
-      if (employee_benefits_expenses === 0 || other_operating_expenses === 0 || net_earned_premiums === 0) {
-        console.error("Missing or invalid data for management_ratio calculation.");
-        return null;
-      }
-
-      const value = (employee_benefits_expenses + other_operating_expenses) / net_earned_premiums;
-      return toLocaleStr(value);; // Return the raw numeric value
+      const value = ((employee_benefits_expenses + other_operating_expenses + other_direct_expenses) / net_earned_premiums) * 100;
+      return `${toLocaleStr(value)}%`; // Return the raw numeric value
     },
   },
   {
@@ -243,13 +179,8 @@ export const insuranceRatiosFormulas: Formula[] = [
       const commission_income = parseFormattedNumber(data["commission_income"]);
       const net_earned_premiums = parseFormattedNumber(data["net_earned_premiums"]);
 
-      if (commission_expenses === 0 || commission_income === 0 || net_earned_premiums === 0) {
-        console.error("Missing or invalid data for commission_ratio calculation.");
-        return null;
-      }
-
-      const value = (commission_expenses - commission_income) / net_earned_premiums;
-      return toLocaleStr(value);; // Return the raw numeric value
+      const value = ((commission_expenses - commission_income) / net_earned_premiums) * 100;
+      return `${toLocaleStr(value)}%`; // Return the raw numeric value
     },
   },
   {
@@ -257,11 +188,6 @@ export const insuranceRatiosFormulas: Formula[] = [
       const loss_ratio_value = parseFormattedNumber(data["loss_ratio"]);
       const management_ratio_value = parseFormattedNumber(data["management_ratio"]);
       const commission_ratio_value = parseFormattedNumber(data["commission_ratio"]);
-
-      if (loss_ratio_value === 0 || management_ratio_value === 0 || commission_ratio_value === 0) {
-        console.error("Missing or invalid data for combined_ratio calculation.");
-        return null;
-      }
 
       const value = loss_ratio_value + management_ratio_value + commission_ratio_value;
       return toLocaleStr(value);; // Return the raw numeric value
@@ -272,38 +198,33 @@ export const insuranceRatiosFormulas: Formula[] = [
       const net_profit = parseFormattedNumber(data["net_profit_loss_for_the_year"]);
       const total_assets = parseFormattedNumber(data["total_assets"]);
 
-      if (net_profit === 0 || total_assets === 0 || quarter === undefined) {
-        console.error("Missing or invalid data for return_on_assets calculation.");
-        return null;
-      }
+      const value = ((net_profit / total_assets) * (4 / quarter)) * 100;
 
-      const value = (net_profit / total_assets) * (4 / quarter);
-      return toLocaleStr(value);; // Return the raw numeric value
+      return `${toLocaleStr(value)}%`; // Return the raw numeric value
     },
   },
   {
     return_on_equity: (data, quarter) => {
-      const earnings_per_share = parseFormattedNumber(data["earning_per_share"]);
-      const book_value_per_share = parseFormattedNumber(data["book_value_per_share"]);
+      //const earnings_per_share = parseFormattedNumber(data["earning_per_share"]);
+      //const book_value_per_share = parseFormattedNumber(data["book_value_per_share"]);
+      //const profit_before_tax = parseFormattedNumber(data["profit_before_tax"])
+      //const income_tax_expenses = parseFormattedNumber(data["income_tax_expense"])
+      //const net_profit = (profit_before_tax - income_tax_expenses)
+      const net_profit = parseFormattedNumber(data["net_profit_loss_for_the_year"])
+      const total_equity = parseFormattedNumber(data["total_equity"]);
+      //if (earnings_per_share === 0 || book_value_per_share === 0 || quarter === undefined) {
+      //  console.error("Missing or invalid data for return_on_equity calculation.");
+      //  return null;
+      //}
 
-      if (earnings_per_share === 0 || book_value_per_share === 0 || quarter === undefined) {
-        console.error("Missing or invalid data for return_on_equity calculation.");
-        return null;
-      }
-
-      const value = (earnings_per_share / book_value_per_share) * (4 / quarter);
-      return toLocaleStr(value);; // Return the raw numeric value
+      const value = ((net_profit / total_equity) * (4 / quarter)) * 100;
+      return `${toLocaleStr(value)}%`; // Return the raw numeric value
     },
   },
   {
     market_cap: (data) => {
       const quarter_end_price = parseFormattedNumber(data["quarter_end_price"]);
       const share_capital = parseFormattedNumber(data["share_capital"]);
-
-      if (quarter_end_price === 0 || share_capital === 0) {
-        console.error("Missing or invalid data for market_cap calculation.");
-        return null;
-      }
 
       const value = quarter_end_price * (share_capital / 100);
       return toLocaleStr(value)
@@ -314,11 +235,6 @@ export const insuranceRatiosFormulas: Formula[] = [
       const quarter_end_price = parseFormattedNumber(data["quarter_end_price"]);
       const earnings_per_share = parseFormattedNumber(data["earning_per_share"]);
 
-      if (quarter_end_price === 0 || earnings_per_share === 0) {
-        console.error("Missing or invalid data for price_to_earnings_ratio calculation.");
-        return null;
-      }
-
       const value = quarter_end_price / earnings_per_share;
       return toLocaleStr(value)
     },
@@ -328,11 +244,6 @@ export const insuranceRatiosFormulas: Formula[] = [
       const quarter_end_price = parseFormattedNumber(data["quarter_end_price"]);
       const book_value_per_share = parseFormattedNumber(data["book_value_per_share"]);
 
-      if (quarter_end_price === 0 || book_value_per_share === 0) {
-        console.error("Missing or invalid data for price_to_book_value_ratio calculation.");
-        return null;
-      }
-
       const value = quarter_end_price / book_value_per_share;
       return toLocaleStr(value)
     },
@@ -340,98 +251,67 @@ export const insuranceRatiosFormulas: Formula[] = [
 ];
 export const hydropowerRatiosFormulas: Formula[] = [
   {
-    earning_per_share: (data: FinancialData, quarter?: number) => {
+    earning_per_share: (data, quarter) => {
       const net_profit = parseFormattedNumber(data["net_profit"]);
       const share_capital = parseFormattedNumber(data["share_capital"]);
-
-      if (net_profit === 0 || share_capital === 0 || quarter === undefined) {
-        console.error("Missing or invalid data for earning_per_share calculation.");
-        return null;
-      }
 
       const value = (net_profit / (share_capital / 100) / quarter) * 4;
       return toLocaleStr(value)
     },
   },
   {
-    book_value_per_share: (data: FinancialData) => {
+    book_value_per_share: (data) => {
       const total_equity = parseFormattedNumber(data["total_equity"]);
       const share_capital = parseFormattedNumber(data["share_capital"]);
-
-      if (total_equity === 0 || share_capital === 0) {
-        console.error("Missing or invalid data for book_value_per_share calculation.");
-        return null;
-      }
 
       const value = total_equity / (share_capital / 100);
       return toLocaleStr(value)
     },
   },
   {
-    return_on_assets: (data: FinancialData, quarter?: number) => {
+    return_on_assets: (data, quarter) => {
       const net_profit = parseFormattedNumber(data["net_profit"]);
       const total_assets = parseFormattedNumber(data["total_assets"]);
-
-      if (net_profit === 0 || total_assets === 0 || quarter === undefined) {
-        console.error("Missing or invalid data for return_on_assets calculation.");
-        return null;
-      }
 
       const value = (net_profit / total_assets) * (4 / quarter);
       return toLocaleStr(value)
     },
   },
   {
-    return_on_equity: (data: FinancialData, quarter?: number) => {
-      const earnings_per_share = parseFormattedNumber(data["earnings_per_share"]);
-      const book_value_per_share = parseFormattedNumber(data["book_value_per_share"]);
+    return_on_equity: (data, quarter) => {
+      //const earnings_per_share = parseFormattedNumber(data["earnings_per_share"]);
+      //const book_value_per_share = parseFormattedNumber(data["book_value_per_share"]);
 
-      if (earnings_per_share === 0 || book_value_per_share === 0 || quarter === undefined) {
-        console.error("Missing or invalid data for return_on_equity calculation.");
-        return null;
-      }
+      const total_equity = parseFormattedNumber(data["total_equity"]);
 
-      const value = (earnings_per_share / book_value_per_share) * (4 / quarter);
+      const net_profit = parseFormattedNumber(data["profit_loss_for_the_period"]);
+
+      const value = (total_equity / net_profit) * (4 / quarter);
       return toLocaleStr(value)
     },
   },
   {
-    market_cap: (data: FinancialData) => {
+    market_cap: (data) => {
       const quarter_end_price = parseFormattedNumber(data["quarter_end_price"]);
       const share_capital = parseFormattedNumber(data["share_capital"]);
-
-      if (quarter_end_price === 0 || share_capital === 0) {
-        console.error("Missing or invalid data for market_cap calculation.");
-        return null;
-      }
 
       const value = quarter_end_price * (share_capital / 100);
       return toLocaleStr(value)
     },
   },
   {
-    price_to_earnings_ratio: (data: FinancialData) => {
+    price_to_earnings_ratio: (data) => {
       const quarter_end_price = parseFormattedNumber(data["quarter_end_price"]);
       const earnings_per_share = parseFormattedNumber(data["earnings_per_share"]);
-
-      if (quarter_end_price === 0 || earnings_per_share === 0) {
-        console.error("Missing or invalid data for price_to_earnings_ratio calculation.");
-        return null;
-      }
 
       const value = quarter_end_price / earnings_per_share;
       return toLocaleStr(value)
     },
   },
   {
-    price_to_book_value_ratio: (data: FinancialData) => {
+    price_to_book_value_ratio: (data) => {
       const quarter_end_price = parseFormattedNumber(data["quarter_end_price"]);
       const book_value_per_share = parseFormattedNumber(data["book_value_per_share"]);
-
-      if (quarter_end_price === 0 || book_value_per_share === 0) {
-        console.error("Missing or invalid data for price_to_book_value_ratio calculation.");
-        return null;
-      }
 
       const value = quarter_end_price / book_value_per_share;
       return toLocaleStr(value)
